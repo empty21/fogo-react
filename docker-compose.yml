@@ -1,6 +1,6 @@
 version: "2"
 services:
   client:
-    build: .
+    image: empty21/fogo-react:latest
     ports:
-      - "5000:5000"
+    - 5000:5000
