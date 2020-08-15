@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class Footer extends React.Component {
+export class FooterComponent extends React.Component {
   render() {
     return(
       <footer>
@@ -10,7 +10,7 @@ export class Footer extends React.Component {
               <div className="container-fluid">
                 <div className="h2">
                   <img src="/img/logo.png" alt="Fogo logo" height="70px" width="70px"/>
-                    <span className="ml-3">FOGO</span>
+                  <span className="ml-3">FOGO</span>
                 </div>
                 <div>
                   Ứng dụng tìm phòng trọ miễn phí!
@@ -39,4 +39,4 @@ export class Footer extends React.Component {
     );
   }
 }
-export default Footer;
+export default FooterComponent;

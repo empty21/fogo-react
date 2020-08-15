@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 
-export class Header extends React.Component {
+export class HeaderComponent extends React.Component {
   render() {
     return(
       <header>
@@ -10,7 +10,7 @@ export class Header extends React.Component {
           <div className="container">
             <Link to='/' className="navbar-brand mb-0">
               <img alt="Brand" src="/img/logo.png" width="30px" height="30px" />
-                <span className="navbar-brand mb-0 h1 text-white ml-1">FOGO</span>
+              <span className="navbar-brand mb-0 h1 text-white ml-1">FOGO</span>
             </Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -33,4 +33,4 @@ export class Header extends React.Component {
     );
   }
 }
-export default Header;
+export default HeaderComponent;

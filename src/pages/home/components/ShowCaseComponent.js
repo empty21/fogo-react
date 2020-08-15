@@ -1,6 +1,6 @@
 import React from "react";
 
-export class ShowCase extends React.Component {
+export class ShowCaseComponent extends React.Component {
   render() {
     return(
       <div className="showcase">
@@ -15,7 +15,7 @@ export class ShowCase extends React.Component {
             </div>
           </div>
         </div>
-        <div className="showcase-slogan">
+        <div className="showcase-slogan text-fogo">
           <h1>Fogo</h1>
           <h3>Ứng dụng tìm kiếm phòng trọ!</h3>
         </div>
@@ -23,3 +23,4 @@ export class ShowCase extends React.Component {
     );
   }
 }
+export default ShowCaseComponent;
