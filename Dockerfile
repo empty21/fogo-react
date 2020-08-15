@@ -4,7 +4,7 @@ EXPOSE 5000
 WORKDIR /app
 # Install app dependencies
 ADD package*.json /app/
-RUN npm install -f
+RUN npm install
 # Copy app source code
 ADD . /app
 #Expose port and start application
