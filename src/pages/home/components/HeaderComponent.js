@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
+import { connect } from "react-redux";
 
 export class HeaderComponent extends React.Component {
   render() {
@@ -22,9 +23,26 @@ export class HeaderComponent extends React.Component {
                 <li className="nav-item active">
                   <Link to="/" className="nav-link">Home</Link>
                 </li>
-                <li className="nav-item active">
+                <li className="nav-item">
                   <Link to="/about" className="nav-link">About me</Link>
                 </li>
+              </ul>
+              <ul className="navbar-nav ml-auto">
+                {this.props.isAuthenticated ?
+                  <li class="nav-item dropdown">
+                    <Link class="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">
+                      {localStorage.getItem("username")}
+                    </Link>
+                    <div class="dropdown-menu">
+                      <Link className="dropdown-item" to="#">Profile</Link>
+                      <div className="dropdown-divider" />
+                      <Link className="dropdown-item" to="/auth/logout">Log out</Link>
+                    </div>
+                  </li> :
+                  <li className="nav-item">
+                    <Link className="nav-link active" to="/auth">Login/Register</Link>
+                  </li>
+                }
               </ul>
             </div>
           </div>
@@ -33,4 +51,10 @@ export class HeaderComponent extends React.Component {
     );
   }
 }
-export default HeaderComponent;
+const mapStateToProps = (state) => {
+  return {
+    ui: state.ui,
+    isAuthenticated: state.user.isAuthenticated
+  }
+}
+export default connect(mapStateToProps)(HeaderComponent);

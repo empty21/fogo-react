@@ -1,0 +1,59 @@
+
+.fogo-img > img {
+  margin: 4rem 0;
+  left: 0;
+}
+
+
+.fogo-img > div {
+  margin-left: 2rem;
+  font-size: 1rem;
+}
+
+.box-border-radius {
+  border-radius: 2rem;
+}
+
+.btn-light > img {
+  width: 2rem;
+  margin: 0 0.6rem;
+}
+
+.login-or {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.span-or {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  margin-left: -25px;
+  background-color: #fff;
+  width: 50px;
+  text-align: center;
+}
+
+.login-form {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1rem;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  outline: 0;
+}
+
+.btn-google {
+  min-width: 90%;
+  margin-top: 1rem;
+  box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 2rem !important;
+  color: #7f8fae !important;
+  font-weight: 700 !important;
+}

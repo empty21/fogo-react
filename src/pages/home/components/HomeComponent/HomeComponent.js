@@ -22,12 +22,14 @@ function RoomSearchPreview(props) {
             <div className="row text-black-50">
               <div className="col-12">
                 <i className="fas fa-house-user text-icon"/>
-                <span> {
-                  data.type === "Dormitory"?"Kí túc xá":
-                    data.type === "Apartment"?"Căn hộ":
-                      data.type === "Shared"?"Phòng ở ghép":
-                        "Phòng cho thuê"
-                }</span>
+                <span>
+                  {
+                    data.type === "Dormitory"?"Kí túc xá":
+                      data.type === "Apartment"?"Căn hộ":
+                        data.type === "Shared"?"Phòng ở ghép":
+                          "Phòng cho thuê"
+                  }
+                </span>
               </div>
               <div className="col-md-6">
                 <i className="fas fa-ruler text-icon"/>
@@ -55,6 +57,7 @@ function RoomSearchPreview(props) {
     </Link>
   );
 }
+// eslint-disable-next-line no-unused-vars
 function SharedRoomPreview(props) {
 
 }

@@ -7,6 +7,7 @@ import FooterComponent from "./components/FooterComponent";
 import ShowCaseComponent from "./components/ShowCaseComponent";
 import HomeComponent from "./components/HomeComponent/HomeComponent";
 import RoomDetailsComponent from "./components/RoomDetailsComponent/RoomDetailsComponent";
+import AuthRoute from "../../utils/authRoute";
 
 export class HomePage extends React.Component {
   render() {
@@ -20,7 +21,7 @@ export class HomePage extends React.Component {
         <ShowCaseComponent />
         <Switch>
           <Route exact path="/" component={HomeComponent}/>
-          <Route path="/rooms/:id" component={RoomDetailsComponent}/>
+          <AuthRoute errMessage="Bạn cần đăng nhập để xem phòng" path="/rooms/:id" component={RoomDetailsComponent}/>
         </Switch>
         <FooterComponent />
       </div>
