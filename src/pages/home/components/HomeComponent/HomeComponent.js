@@ -95,7 +95,7 @@ class HomeComponent extends React.Component {
         <div className="row pt-5">
           <div className="col-md-8">
             <div className="card">
-              <div className="card-header">
+              <div className="card-header" >
                 <span><i className="fas fa-home text-fogo mr-1"/> Phòng cho thuê</span>
               </div>
               <div className="card-body">

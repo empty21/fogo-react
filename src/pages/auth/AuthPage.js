@@ -30,7 +30,7 @@ class AuthPage extends React.Component {
             </div>
             <div>
               <Link to="#" className="text-left">Điều khoản sử dụng</Link>
-              <p className="text-secondary">@powered by Fogo</p>
+              <p className="text-secondary" style={{opacity: "80%"}} >@powered by Fogo</p>
             </div>
           </div>
         }

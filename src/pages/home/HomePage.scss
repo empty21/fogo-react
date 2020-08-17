@@ -1,6 +1,6 @@
 .showcase {
   position: relative;
-  min-height: 400px;
+  min-height: 500px;
   background-image: url(../../images/showcase.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -10,37 +10,58 @@
   position: absolute;
   bottom: 5%;
   padding-left: 5%;
-  text-shadow: 0 0 2px rgba(238, 238, 238, 0.75);
+  color :white;
 }
 .showcase-share {
   padding-top: 100px;
 }
-.card-header>span {
-  font-size: 24px;
+span{
+  text-indent: 10px;
 }
 
+.card{
+  border-radius: 30px;
+}
+.card-header{
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+
+}
+.card-header>span {
+  font-size: 24px;
+
+}
 .room-preview:hover {
   text-decoration: none;
   transform: scale(1.01);
 }
 img.room-thumbnail {
-  width: 100%;
-  height: 150px;
-  max-height: 150px;
-  border-radius: 8px;
+  opacity: 85%;
+  width: 90%;
+  height: 180px;
+  max-height: 180px;
+  border-radius: 18px;
   object-fit: cover;
+  -webkit-box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
+  -moz-box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
+  box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
 }
-
 /*SEARCH BAR*/
 #search-box{
   padding-left:0;
   position:relative;
+  opacity: 70%;
+}
+#search-box:hover{
+  opacity: 95%;
+  transform: 1.01;
 }
 #search-box input{
+
   width:100%;
   border:0;
   height:60px;
-  border-radius:25px;
+  border-radius:30px;
   outline:none;
   padding-left:60px;
   line-height:61px;
@@ -75,7 +96,7 @@ img.room-thumbnail {
   top:10px;
   right:25px;
 }
-#search-box .inline-search #search-btn{background-image:linear-gradient(to right,#6A1B9A,#9C27B0);
+#search-box .inline-search #search-btn{background-image:linear-gradient(to right,#F25C05,#F29F05);
   border:0;
   transition:background-size .2s ease-in-out,.2s box-shadow ease-in-out,.2s filter,.3s opacity;
   color:#fff;
