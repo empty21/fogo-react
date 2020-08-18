@@ -16,7 +16,7 @@ export class ShowCaseComponent extends React.Component {
           </div>
         </div>
         <div className="showcase-slogan text-fogo">
-          <h1>Fogo</h1>
+          <h1 style={{color:"#F25C05",fontSize:"50px"}}>Fogo</h1>
           <h3>Ứng dụng tìm kiếm phòng trọ!</h3>
         </div>
       </div>
