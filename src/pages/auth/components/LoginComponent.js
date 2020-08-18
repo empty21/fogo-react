@@ -8,7 +8,7 @@ class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      phoneNumber: "",
       password: ""
     }
   }
@@ -18,50 +18,39 @@ class LoginComponent extends React.Component {
       [e.target.id]: e.target.value
     });
   }
-  onKeyUp
   handleLogin = () => {
     const userData = this.state;
-    this.props.loginUser(userData);
+    this.props.loginUser(userData, this.props.history);
   }
   render() {
     const { ui } = this.props;
-    const {username, password} = this.state;
+    const {phoneNumber, password} = this.state;
     return (
       <div className="col-12 col-md-5">
         <div className="container border-left text-center">
-          <div className="h3 pl-2 text-left text-secondary">Sign in</div>
-          <button className="btn btn-light btn-google text-left box-border-radius p-2 mt-3">
-            <img alt="Google Login" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
-            Sign in with Google
-          </button>
-          <div className="col-md-12 ">
-            <div className="login-or mt-4 mb-2 pt-2 pb-2">
-              <hr className="mt-0 mb-0" />
-              <span className="span-or">or</span>
-            </div>
-          </div>
+          <div className="h3 pl-2 text-left text-secondary">Đăng nhập</div>
           <div className="login-form"
-               onKeyPress={e => e.key==="Enter" && !(username&&password) && this.handleLogin()}>
+               onKeyPress={e => e.key==="Enter" && !(phoneNumber&&password) && this.handleLogin()}>
             <div className="form-group text-left">
-              <label className="text-icon">Username or Email address</label>
-              <input type="text" id="username" className="form-control box-border-radius p-4"
-                     placeholder="example@email.com" value={username}
+              <label className="text-icon">Số điện thoại</label>
+              <input type="text" id="phoneNumber" className="form-control box-border-radius p-4"
+                     placeholder="Enter your phone number" value={phoneNumber}
                      onChange={this.handleChange}
               />
             </div>
             <div className="form-group text-left">
-              <label className="text-icon">Password</label>
+              <label className="text-icon">Mật khẩu</label>
               <input type="password" id="password" className="form-control box-border-radius p-4"
                      placeholder="Enter password..." value={password}
                      onChange={this.handleChange}
               />
             </div>
             <div className="col-md-12 text-right">
-              <button type="submit" disabled={!(username&&password)}
+              <button type="submit" disabled={!(phoneNumber&&password)}
                       className="btn btn-light box-border-radius text-icon"
                       onClick={this.handleLogin}>
                 {ui.loading && <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />}
-                Sign in
+                Đăng nhập
               </button>
             </div>
             <div className="form-group">
@@ -77,6 +66,7 @@ class LoginComponent extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
+    user: state.user,
     ui: state.ui
   }
 }

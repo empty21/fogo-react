@@ -1,38 +1,27 @@
-import { SET_ERROR, SET_SUCCESS, CLEAR_UI, SET_LOADING } from "../types";
+import {CLEAR_UI, SET_LOADING, SET_NEXT_PAGE} from "../types";
 
 const initialState = {
   loading: false,
-  errors: null,
-  success: null
+  nextPage: null
 }
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_ERROR:
-      return {
-        ...state,
-        loading: false,
-        success: null,
-        errors: action.payload
-      };
-    case SET_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        errors: null,
-        success: action.payload
-      }
     case CLEAR_UI:
       return {
         ...state,
         loading: false,
-        errors: null,
-        success: null
+        nextPage: null
       }
     case SET_LOADING:
       return {
         ...state,
         loading: true
+      }
+    case SET_NEXT_PAGE:
+      return {
+        ...state,
+        nextPage: action.payload
       }
     default:
       return state;

@@ -1,51 +1,65 @@
 import api from "../../services/api";
 import {
-   SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_LOADING, CLEAR_UI, SET_ERROR
+  SET_AUTHENTICATED, SET_UNAUTHENTICATED
 } from "../types";
+import { setLoading, clearUi } from "./uiAction";
 import pushNotify from "../../utils/pushNotify";
 
+export function setAuthenticated() {
+  return {
+    type: SET_AUTHENTICATED
+  }
+}
+export function setUnauthenticated() {
+  return {
+    type: SET_UNAUTHENTICATED
+  }
+}
+
 export const registerUser = (userData, history) => dispatch => {
-  dispatch({type: SET_LOADING});
+  dispatch(setLoading());
   api.post("/users/register", userData)
     .then(() => {
       pushNotify({title: "Success", message: "Registered successful"});
-      dispatch({
-        type: CLEAR_UI
-      });
-      history.push("/auth/login");
+      dispatch(clearUi());
+      history.push("/auth/verify");
     }).catch(err => {
       pushNotify({title: "Error", message: err.messages, type: "danger"});
-      dispatch({
-        type: SET_ERROR,
-        payload: err
-      });
   })
 }
-export const loginUser = userData => dispatch => {
-  dispatch({type: SET_LOADING});
+export const verifyUser = (verifyData, history) => dispatch => {
+  dispatch(setLoading());
+  api.post("/users/verify", verifyData)
+    .then(() => {
+      pushNotify({title: "Success", message: "Verified Successfull"});
+      dispatch(clearUi());
+      history.push("/auth/login");
+    }).catch(err => {
+    pushNotify({title: "Error", message: err.messages, type: "danger"});
+  })
+}
+export const loginUser = (userData, history) => dispatch => {
+  dispatch(setLoading());
   api.post("/users/login", userData)
-    .then(data => {
+    .then(async data => {
       localStorage.setItem("r_token", data.refreshToken);
       localStorage.setItem("c_token", data.accessToken);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("role", data.fullName);
-      pushNotify({title: "Success", message: "Logged in as "+data.username})
-      dispatch({
-        type: SET_AUTHENTICATED
-      });
-      dispatch({
-        type: CLEAR_UI
-      });
+      const user = await api.getWithAuth("/users/me");
+      localStorage.setItem("fullName", user.fullName);
+      localStorage.setItem("role", user.role);
+      pushNotify({title: "Success", message: "Logged successful"})
+      dispatch(setAuthenticated());
+      dispatch(clearUi());
+      history.push("/");
     }).catch(err => {
-      pushNotify({title: "Error", message: err.messages, type: "danger"})
-      dispatch({
-        type: SET_ERROR,
-        payload: err
-      });
+      pushNotify({title: "Error", message: err.messages, type: "danger"});
+      dispatch(clearUi());
+
   });
 }
+
 export const logoutUser = () => dispatch => {
   pushNotify({title: "Success", message: "Loged out"});
   localStorage.clear();
-  dispatch({type: SET_UNAUTHENTICATED});
+  dispatch(setUnauthenticated());
 }
