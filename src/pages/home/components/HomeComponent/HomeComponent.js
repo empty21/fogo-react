@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import LazyLoad from "react-lazyload";
-import axios from "axios";
-import {API_URL} from "../../../../config.json";
+import api from "../../../../services/api";
+import pushNotify from "../../../../utils/pushNotify";
 
 
 function RoomSearchPreview(props) {
@@ -67,31 +67,36 @@ class HomeComponent extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      data: {}
+      data: null
     };
   }
   componentDidMount() {
     document.title = "Fogo - Ứng dụng tìm phòng trọ miễn phí";
-    axios.post(`${API_URL}/rooms/search`)
-      .then(res => {
-        this.setState({
-          ...this.state,
-          data: res.data,
-          isLoaded: true
-        })
-      }).catch(() => {
-      this.setState({
-        ...this.state,
-        isLoaded: true,
-        err: "Unable find this room id"
+    api.post("/rooms/search", {})
+      .then(data => {
+        if(data.data) {
+          this.setState({
+            ...this.state,
+            data: data,
+            isLoaded: true
+          });
+        } else {
+          this.setState({
+            ...this.state,
+            error: data.messages,
+            isLoaded: true
+          });
+        }
       })
-    });
+    /*TODO*/
   }
   render() {
     const { error, isLoaded, data } = this.state;
 
     return (
+
       <div className="container-fluid">
+        {isLoaded && error && pushNotify({ title: "Error", message: error, type: "danger"})}
         <div className="row pt-5">
           <div className="col-md-8">
             <div className="card">
@@ -99,17 +104,14 @@ class HomeComponent extends React.Component {
                 <span><i className="fas fa-home text-fogo mr-1"/> Phòng cho thuê</span>
               </div>
               <div className="card-body">
-                {!isLoaded ?
-                  <Skeleton /> : error ?
-                    <div>Error Load Data</div> :
-                      data.data.map(room =>
-                        <div>
-                          <LazyLoad height={150}>
-                            <RoomSearchPreview data={room} />
-                            <div className="border-top my-3"/>
-                          </LazyLoad>
-                        </div>
-                      )
+                {isLoaded ?
+                  data && data.data.map(room => <div>
+                    <LazyLoad height={150}>
+                      <RoomSearchPreview data={room}/>
+                      <div className="border-top my-3"/>
+                    </LazyLoad>
+                  </div>) :
+                  <Skeleton/>
                 }
               </div>
             </div>
@@ -118,6 +120,9 @@ class HomeComponent extends React.Component {
             <div className="card">
               <div className="card-header">
                 <span><i className="fas fa-user-friends text-fogo mr-1"/> Tìm bạn ở ghép</span>
+              </div>
+              <div className="card-body">
+
               </div>
             </div>
           </div>

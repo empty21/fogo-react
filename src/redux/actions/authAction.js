@@ -42,20 +42,23 @@ export const loginUser = (userData, history) => dispatch => {
   dispatch(setLoading());
   api.post("/users/login", userData)
     .then(async data => {
-      localStorage.setItem("r_token", data.refreshToken);
-      localStorage.setItem("c_token", data.accessToken);
-      const user = await api.getWithAuth("/users/me");
-      localStorage.setItem("fullName", user.fullName);
-      localStorage.setItem("role", user.role);
-      pushNotify({title: "Success", message: "Logged successful"})
-      dispatch(setAuthenticated());
-      dispatch(clearUi());
-      history.push("/");
-    }).catch(err => {
-      pushNotify({title: "Error", message: err.messages, type: "danger"});
-      dispatch(clearUi());
-
-  });
+      console.log(data);
+      if(data.statusCode) {
+        pushNotify({title: "Error", message: data.messages, type: "danger"});
+        dispatch(clearUi());
+      } else {
+        localStorage.setItem("r_token", data.refreshToken);
+        localStorage.setItem("c_token", data.accessToken);
+        const user = await api.getWithAuth("/users/me");
+        console.log(user);
+        localStorage.setItem("fullName", user.fullName);
+        localStorage.setItem("role", user.role);
+        pushNotify({title: "Success", message: "Logged successful"})
+        dispatch(setAuthenticated());
+        dispatch(clearUi());
+        history.push("/");
+      }
+    });
 }
 
 export const logoutUser = () => dispatch => {

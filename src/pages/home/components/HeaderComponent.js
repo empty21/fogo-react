@@ -31,7 +31,7 @@ export class HeaderComponent extends React.Component {
                 {this.props.isAuthenticated ?
                   <li class="nav-item dropdown">
                     <Link class="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">
-                      {localStorage.getItem("username")}
+                      {localStorage.getItem("fullName")}
                     </Link>
                     <div class="dropdown-menu">
                       <Link className="dropdown-item" to="#">Profile</Link>

@@ -1,7 +1,7 @@
 import React from "react";
 import {  Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { default as axios } from "axios";
+import api from "../../../../services/api";
 import { API_URL } from "../../../../config.json";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
@@ -20,7 +20,7 @@ export class RoomDetailsComponent extends React.Component {
   }
   componentDidMount() {
     const roomId = this.props.match.params.id;
-    axios.get(`${API_URL}/rooms/${roomId}`)
+    api.get(`${API_URL}/rooms/${roomId}`)
       .then(res => {
         this.setState({
           ...this.state,

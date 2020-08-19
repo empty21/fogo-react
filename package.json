@@ -4,10 +4,11 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
-    "axios": "^0.19.2",
+    "bluebird": "^3.7.2",
     "bootstrap": "^4.5.2",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
+    "node-fetch": "^2.6.0",
     "node-sass": "^4.14.1",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
