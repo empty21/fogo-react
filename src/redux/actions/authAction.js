@@ -19,15 +19,19 @@ export function setUnauthenticated() {
 export const registerUser = (userData, history) => dispatch => {
   dispatch(setLoading());
   api.post("/users/register", userData)
-    .then(() => {
-      pushNotify({title: "Success", message: "Registered successful"});
+    .then((res) => {
+      if(res.statusCode) {
+        pushNotify({title: "Error", message: res.messages, type: "danger"});
+      } else {
+        pushNotify({title: "Success", message: "Registered successful"});
+        history.push("/auth/verify");
+      }
       dispatch(clearUi());
-      history.push("/auth/verify");
     }).catch(err => {
-      pushNotify({title: "Error", message: err.messages, type: "danger"});
+
   })
 }
-export const verifyUser = (verifyData, history) => dispatch => {
+/*export const verifyUser = (verifyData, history) => dispatch => {
   dispatch(setLoading());
   api.post("/users/verify", verifyData)
     .then(() => {
@@ -37,12 +41,11 @@ export const verifyUser = (verifyData, history) => dispatch => {
     }).catch(err => {
     pushNotify({title: "Error", message: err.messages, type: "danger"});
   })
-}
+}*/
 export const loginUser = (userData, history) => dispatch => {
   dispatch(setLoading());
   api.post("/users/login", userData)
     .then(async data => {
-      console.log(data);
       if(data.statusCode) {
         pushNotify({title: "Error", message: data.messages, type: "danger"});
         dispatch(clearUi());
@@ -50,7 +53,6 @@ export const loginUser = (userData, history) => dispatch => {
         localStorage.setItem("r_token", data.refreshToken);
         localStorage.setItem("c_token", data.accessToken);
         const user = await api.getWithAuth("/users/me");
-        console.log(user);
         localStorage.setItem("fullName", user.fullName);
         localStorage.setItem("role", user.role);
         pushNotify({title: "Success", message: "Logged successful"})

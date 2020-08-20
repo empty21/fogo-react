@@ -35,11 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build",
-    "docker-login": "docker login -u empty21 -p 53M1C0l0n",
-    "docker-build": "docker build -t empty21/fogo-react .",
-    "docker-push": "docker push empty21/fogo-react",
-    "docker": "npm run docker-login && npm run docker-build && npm run docker-push"
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": "react-app"
