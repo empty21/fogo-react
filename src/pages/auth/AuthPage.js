@@ -4,17 +4,23 @@ import "./AuthPage.scss";
 import LoginComponent from "./components/LoginComponent";
 import {Link, Switch, Route, Redirect} from "react-router-dom";
 import RegisterComponent from "./components/RegisterComponent";
-import { logoutUser } from "../../redux/actions/authAction";
-
+import store, { mapStateToProps } from "../../redux/store";
+import pushNotify from "../../utils/pushNotify";
+import { setUnauthenticated } from "../../redux/actions/authAction";
 
 class AuthPage extends React.Component {
-
+  handleLogout() {
+    pushNotify({title: "Success", message: "Logged out"});
+    localStorage.clear();
+    store.dispatch(setUnauthenticated());
+    this.props.history.push("/");
+  }
   render() {
     const { from } = this.props.location.state || {from: {pathname: '/'}}
     return (
       <div>
         {this.props.location.pathname === "/auth/logout" ?
-          <div>{this.props.logoutUser()}<Redirect to={from.pathname}/></div> :
+          this.handleLogout() :
           this.props.isAuthenticated ? <Redirect to={from.pathname}/> :
           <div className="container pt-5">
             <div className="d-none d-md-block text-secondary text-left border-left pl-1">Ứng dụng tìm phòng trọ</div>
@@ -39,9 +45,4 @@ class AuthPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isAuthenticated: state.user.isAuthenticated
-  }
-}
-export default connect(mapStateToProps, { logoutUser })(AuthPage);
+export default connect(mapStateToProps)(AuthPage);

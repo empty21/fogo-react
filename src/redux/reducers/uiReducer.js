@@ -1,8 +1,7 @@
-import {CLEAR_UI, SET_LOADING, SET_NEXT_PAGE} from "../types";
+import {CLEAR_UI, SET_LOADING} from "../types";
 
 const initialState = {
-  loading: false,
-  nextPage: null
+  loading: false
 }
 
 export default function (state = initialState, action) {
@@ -10,20 +9,14 @@ export default function (state = initialState, action) {
     case CLEAR_UI:
       return {
         ...state,
-        loading: false,
-        nextPage: null
+        loading: false
       }
     case SET_LOADING:
       return {
         ...state,
         loading: true
       }
-    case SET_NEXT_PAGE:
-      return {
-        ...state,
-        nextPage: action.payload
-      }
     default:
-      return state;
+      return state
   }
 }

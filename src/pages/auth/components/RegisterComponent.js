@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import FadeIn from "react-fade-in";
 import { Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
-import { registerUser } from "../../../redux/actions/authAction";
 import { isMobilePhone, isLength, isAlpha } from "validator";
+import { mapStateToProps, mapDispatchToProps } from "../../../redux/store";
+import api from "../../../services/api";
+import pushNotify from "../../../utils/pushNotify";
 
 class RegisterComponent extends React.Component {
   constructor(props) {
@@ -34,12 +36,26 @@ class RegisterComponent extends React.Component {
   }
 
   handleRegister = () => {
-    const { phoneNumber, fullName, password } = this.state;
-    this.props.registerUser({
-      fullName: fullName.value,
-      phoneNumber: phoneNumber.value,
-      password: password.value
-    }, this.props.history);
+    const { phoneNumber, fullName, password, rePassword } = this.state;
+    if(phoneNumber.isValid && fullName.isValid && password.isValid && rePassword.isValid) {
+      const userData = {
+        phoneNumber: this.state.phoneNumber.value,
+        fullName: this.state.fullName.value,
+        password: this.state.password.value
+      };
+      this.props.setLoading();
+      api.post("/users/register", userData)
+        .then((res) => {
+          pushNotify({title: "Success", message: "Registered successful"});
+          this.props.history.push("/auth/login");
+          this.props.clearUi();
+        }).catch(err => {
+        pushNotify({title: "Error", message: err.messages, type: "danger"});
+      });
+    } else {
+      pushNotify({title: "Lỗi", message: "Bạn vui lòng điền đầy đủ các trường", type: "danger"});
+    }
+
   }
 
   handleChange = (e) => {
@@ -85,7 +101,9 @@ class RegisterComponent extends React.Component {
         <div className="container border-left text-center">
           <div className="h3 pl-2 text-left text-secondary">Đăng kí</div>
           <div className="login-form">
-            <div className="form-group text-left">
+            <div className="form-group text-left" onKeyPress={e => {
+              if(e.key === "Enter") this.handleRegister();
+            }}>
               <label className="text-icon">Tên của bạn</label>
               <input type="text" id="fullName" className="form-control box-border-radius p-4"
                      placeholder="Enter your full name" value={fullName.value}
@@ -125,7 +143,6 @@ class RegisterComponent extends React.Component {
 
             <div className="col-md-12 text-right">
               <button type="submit" className="btn btn-light box-border-radius text-icon"
-                      disabled={!(phoneNumber.isValid&&fullName.isValid&&password.isValid&&rePassword.isValid)}
                       onClick={this.handleRegister} >
                 {ui.loading && <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />}
                 Đăng kí
@@ -142,9 +159,5 @@ class RegisterComponent extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    ui: state.ui
-  }
-}
-export default connect(mapStateToProps, { registerUser })(RegisterComponent);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterComponent);

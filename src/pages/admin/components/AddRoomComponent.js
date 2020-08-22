@@ -1,61 +1,65 @@
 import React from "react";
 import api from "../../../services/api";
+import { connect } from "react-redux";
+import {mapStateToProps, mapDispatchToProps} from "../../../redux/store";
+import pushNotify from "../../../utils/pushNotify";
 
+const initialData = {
+  "owner.name": "",
+  "owner.phoneNumber": "",
+  "address.city.code": "",
+  "address.city.text": "",
+  "address.district.code": "",
+  "address.district.text": "",
+  "address.ward.code": "",
+  "address.ward.text": "",
+  "address.street": "",
+  "address.houseNumber": "",
+  "details.name": "",
+  "details.type": "Unshared",
+  "details.note": "",
+  "details.area": 0,
+  "details.capacity": 0,
+  "details.price.value": 0,
+  "details.price.unit": "phòng",
+  "details.deposit": "",
+  "details.gender": "any",
+  "details.additionalFee.electric.value": 0,
+  "details.additionalFee.electric.unit": "số",
+  "details.additionalFee.water.value": 0,
+  "details.additionalFee.water.unit": "số",
+  "details.additionalFee.other": "",
+  "utils.airConditioner": false,
+  "utils.bathroom": false,
+  "utils.parkingArea": false,
+  "utils.wifi": false,
+  "utils.liveWithOwner": true,
+  "utils.fridge": false,
+  "utils.washingMachine": false,
+  "utils.waterHeater": false,
+  "utils.bed": false,
+  "utils.closet": false,
+  "utils.petsAllowed": false,
+  "utils.television": false,
+  "utils.cookingAllowed": false,
+  "utils.garret": false,
+  "utils.window": false,
+  "utils.balcony": false,
+  "status": "",
+  "images": []
+};
 class AddRoomComponent extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      isAdding: false,
+      files: [],
       locationList: {
         city: [{code: 2, name: "Hà Nội"}],
         district: [],
         ward: []
-      }, roomData: {
-        "owner.name": "",
-        "owner.phoneNumber": "",
-        "address.city.code": "",
-        "address.city.text": "",
-        "address.district.code": "",
-        "address.district.text": "",
-        "address.district.cityCode": "",
-        "address.ward.code": "",
-        "address.ward.text": "",
-        "address.ward.districtCode": "",
-        "address.street": "",
-        "address.houseNumber": "",
-        "details.name": "",
-        "details.type": "Unshared",
-        "details.note": "",
-        "details.are": 0,
-        "details.capacity": 0,
-        "details.price.value": 0,
-        "details.price.unit": "phòng/tháng",
-        "details.deposit.value": 0,
-        "details.deposit.unit": "phòng/tháng",
-        "details.gender": "any",
-        "details.additionalFee.electric.value": 0,
-        "details.additionalFee.electric.unit": "số",
-        "details.additionalFee.water.value": 0,
-        "details.additionalFee.water.unit": "số",
-        "details.additionalFee.other": "",
-        "utils.airConditioner": false,
-        "utils.bathroom": false,
-        "utils.parkingArea": false,
-        "utils.wifi": false,
-        "utils.liveWithOwner": true,
-        "utils.fridge": false,
-        "utils.washingMachine": false,
-        "utils.waterHeater": false,
-        "utils.bed": false,
-        "utils.closet": false,
-        "utils.petsAllowed": false,
-        "utils.television": false,
-        "utils.cookingAllowed": false,
-        "utils.garret": false,
-        "utils.window": false,
-        "utils.balcony": false,
-        "amount.available": 0,
-        "amount.summary": 0
+      },
+      roomData: {
+        ...initialData
       },
     }
   }
@@ -63,23 +67,127 @@ class AddRoomComponent extends React.Component {
 
   }
   handleAdd = (e) => {
-    console.log(this.state);
+    const { roomData } = this.state;
+    const data = {
+      "owner": {
+        "name": roomData["owner.name"],
+        "phoneNumber": roomData["owner.phoneNumber"]
+      },
+      "address": {
+        "city": {
+          "code": roomData["address.city.code"],
+          "text": roomData["address.city.text"]
+        },
+        "district": {
+          "code": roomData["address.district.code"],
+          "text": roomData["address.district.text"]
+        },
+        "ward": {
+          "code": roomData["address.ward.code"],
+          "text": roomData["address.ward.text"]
+        },
+        "street": roomData["address.street"],
+        "houseNumber": roomData["address.houseNumber"]
+      },
+      "details": {
+        "name": roomData["details.name"],
+        "type": roomData["details.type"],
+        "note": roomData["details.note"],
+        "area": roomData["details.area"],
+        "capacity": roomData["details.capacity"],
+        "price": {
+          "value": roomData["details.price.value"],
+          "unit": roomData["details.price.unit"]
+        },
+        "deposit": roomData["details.deposit"],
+        "additionalFee": {
+          "electric": {
+            "value": roomData["details.additionalFee.electric.value"],
+            "unit": roomData["details.additionalFee.electric.unit"]
+          },
+          "water": {
+            "value": roomData["details.additionalFee.water.value"],
+            "unit": roomData["details.additionalFee.water.unit"]
+          },
+          "other": roomData["details.additionalFee.other"]
+        },
+        "gender": roomData["details.gender"]
+      },
+      "utils": {
+        "airConditioner": roomData["utils.airConditioner"],
+        "bathroom": roomData["utils.bathroom"],
+        "parkingArea": roomData["utils.parkingArea"],
+        "wifi": roomData["utils.wifi"],
+        "liveWithOwner": roomData["utils.liveWithOwner"],
+        "fridge": roomData["utils.fridge"],
+        "washingMachine": roomData["utils.washingMachine"],
+        "waterHeater": roomData["utils.waterHeater"],
+        "bed": roomData["utils.bed"],
+        "closet": roomData["utils.closet"],
+        "petsAllowed": roomData["utils.petsAllowed"],
+        "television": roomData["utils.television"],
+        "cookingAllowed": roomData["utils.cookingAllowed"],
+        "garret": roomData["utils.garret"],
+        "window": roomData["utils.window"],
+        "balcony": roomData["utils.balcony"]
+      },
+      "images": roomData["images"],
+      "status": roomData["status"]
+    }
+    this.props.setLoading();
+    api.post("/rooms", data)
+      .then(data => {
+        pushNotify({title: Error, message: data.messages});
+        this.setState({...this.state, roomData: {...initialData}});
+        this.props.clearUi();
+      }).catch(e => {
+        pushNotify({title: Error, message: "Adding fail", type: "danger"})
+        this.props.clearUi();
+    })
   }
   handleChange = (e) => {
     const { target } = e;
-    if(target.type === "select-one") console.log(target.options[target.options.selectedIndex].text);
     const value = target.type === "checkbox" ? !this.state.roomData[target.id] : target.value;
+    this.setState(state => {
+      switch (target.id) {
+        case "address.city.code":
+          state.roomData["address.city.text"] = target.options[target.selectedIndex].text;
+          break;
+        case "address.district.code":
+          state.roomData["address.district.text"] = target.options[target.selectedIndex].text;
+          break;
+        case "address.ward.code":
+          state.roomData["address.ward.text"] = target.options[target.selectedIndex].text;
+          break;
+        default:
+          break;
+      }
+      state.roomData[target.id] = value;
+      return state
+    });
+  }
+  handleUpload = async (e) => {
+    this.props.setLoading();
+    const { files } = this.state;
+    for(let i = 0; i < files.length; i++) {
+      const formData = new FormData();
+      formData.append("image", files[i], files[i].name);
+      await api.uploadFile(formData)
+        .then(data => this.setState(state => {
+          state.roomData.images.push(data.path);
+          return state;
+        }))
+        .catch(e => console.log(e));
+    }
     this.setState({
       ...this.state,
-      roomData: {
-        ...this.state.roomData,
-        [target.id]: value
-      }
-    });
+      files: []
+    })
+    this.props.clearUi();
   }
 
   render() {
-    const { isAdding, roomData, locationList } = this.state;
+    const { roomData, locationList } = this.state;
     return(
       <div className="container-fluid">
         <div className="card mt-3">
@@ -104,14 +212,14 @@ class AddRoomComponent extends React.Component {
                         value={roomData["address.city.code"]}
                         onChange={(e) => {
                           this.handleChange(e);
-                          api.get("/locations/"+this.state.roomData["address.city.code"])
+                          api.get("/locations/district/"+e.target.value)
                             .then(data => this.setState(state => {
                               state.locationList.district = data;
                               return state;
                             }));
                         }}>
                   <option value="" disabled={true}>Chọn</option>
-                  {locationList.city.map(city => <option value={city.code}>{city.name}</option> )}
+                  {locationList.city.map(city => <option key={city.code} value={city.code}>{city.name}</option> )}
                 </select>
               </div>
               <div className="col-4">
@@ -120,14 +228,14 @@ class AddRoomComponent extends React.Component {
                         value={roomData["address.district.code"]}
                         onChange={(e) => {
                           this.handleChange(e);
-                          api.get("/locations/"+e.target.value)
+                          api.get("/locations/ward/"+e.target.value)
                             .then(data => this.setState(state => {
-                              state.locationList.district = data;
+                              state.locationList.ward = data;
                               return state;
                             }));
                         }}>
                   <option value="" disabled={true}>Chọn</option>
-                  {locationList.district.map(district => <option value={district.code}>{district.name}</option> )}
+                  {locationList.district.map(district => <option key={district.code} value={district.code}>{district.name}</option> )}
                 </select>
               </div>
               <div className="col-4">
@@ -135,6 +243,7 @@ class AddRoomComponent extends React.Component {
                 <select id="address.ward.code" className="form-control"
                         value={roomData["address.ward.code"]} onChange={this.handleChange}>
                   <option value="" disabled={true}>Chọn</option>
+                  {locationList.ward.map(ward => <option key={ward.code} value={ward.code}>{ward.name}</option> )}
                 </select>
               </div>
               <div className="col-2">
@@ -185,13 +294,8 @@ class AddRoomComponent extends React.Component {
               </div>
               <div className="col-3">
                 <label className="col-form-label">Trạng thái:</label>
-                <div className="input-group">
-                  <input type="number" id="amount.available" className="form-control"
-                         value={roomData["amount.available"]} onChange={this.handleChange} />
-                  /
-                  <input type="number" id="amount.summary" className="form-control"
-                         value={roomData["amount.summary"]} onChange={this.handleChange}/>
-                </div>
+                <input type="text" id="status" className="form-control"
+                       value={roomData["status"]} onChange={this.handleChange} />
               </div>
               <div className="col-3">
                 <label className="col-form-label">Giá phòng:</label>
@@ -200,21 +304,16 @@ class AddRoomComponent extends React.Component {
                          value={roomData["details.price.value"]} onChange={this.handleChange} />
                   <select id="details.price.unit" className="form-control"
                           value={roomData["details.price.unit"]} onChange={this.handleChange}>
-                    <option value="phòng/tháng">đ/phòng</option>
-                    <option value="người/tháng">đ/người</option>
+                    <option value="phòng">tr/phòng</option>
+                    <option value="người">tr/người</option>
                   </select>
                 </div>
               </div>
               <div className="col-3">
                 <label className="col-form-label">Đặt cọc:</label>
                 <div className="input-group">
-                  <input type="number" id="details.deposit.value" className="form-control"
-                         value={roomData["details.deposit.value"]} onChange={this.handleChange}/>
-                  <select id="details.deposit.unit" className="form-control"
-                          value={roomData["details.deposit.unit"]} onChange={this.handleChange}>
-                    <option value="phòng/tháng">đ</option>
-                    <option value="người/tháng">tháng</option>
-                  </select>
+                  <input type="text" id="details.deposit" className="form-control"
+                         value={roomData["details.deposit"]} onChange={this.handleChange}/>
                 </div>
               </div>
               <div className="col-2">
@@ -224,8 +323,8 @@ class AddRoomComponent extends React.Component {
                          value={roomData["details.additionalFee.electric.value"]} onChange={this.handleChange}/>
                   <select id="details.additionalFee.electric.unit" className="form-control"
                           value={roomData["details.additionalFee.electric.unit"]} onChange={this.handleChange}>
-                    <option value="số">/số</option>
-                    <option value="người/tháng">/người/tháng</option>
+                    <option value="số">k/số</option>
+                    <option value="người">k/người</option>
                   </select>
                 </div>
               </div>
@@ -236,8 +335,8 @@ class AddRoomComponent extends React.Component {
                          value={roomData["details.additionalFee.water.value"]} onChange={this.handleChange}/>
                   <select id="details.additionalFee.water.unit" className="form-control"
                           value={roomData["details.additionalFee.water.unit"]} onChange={this.handleChange}>
-                    <option value="số">/số</option>
-                    <option value="người/tháng">/người/tháng</option>
+                    <option value="số">k/số</option>
+                    <option value="người">k/người</option>
                   </select>
                 </div>
               </div>
@@ -245,6 +344,11 @@ class AddRoomComponent extends React.Component {
                 <label className="col-form-label">Chi phí khác:</label>
                 <input id="details.additionalFee.other" className="form-control"
                        value={roomData["details.additionalFee.other"]} onChange={this.handleChange}/>
+              </div>
+              <div className="col-12 form-group">
+                <label className="col-form-label">Mô tả chi tiết:</label>
+                <textarea id="details.note" className="form-control"
+                       value={roomData["details.note"]} onChange={this.handleChange}/>
               </div>
               <div className="col-12 form-group">
                 Tiện ích:
@@ -393,13 +497,37 @@ class AddRoomComponent extends React.Component {
                   </div>
                 </div>
               </div>
+              <div className="col-12 text-center">
+                <div className="form-group">
+                  <label className="col-sm-3 control-label">
+                    Upload images
+                  </label>
+                  <span className="btn btn-light">
+                      <input type="file" className="form-control-file" multiple
+                             data-show-upload="true" data-show-caption="true"
+                             onChange={e => this.setState({...this.state, files: e.target.files})}
+                      />
+                  </span>
+                  <button className="btn btn-success" disabled={this.props.ui.loading} onClick={this.handleUpload}>Upload to Server</button>
+                </div>
+                <div className="col-12">
+                  <div className="row">
+                    {roomData.images.map(image =>
+                      <img className="thumbnail p-1 border border-primary" alt="" src={image} />
+                      )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="card-footer">
             <div className="text-right">
               <div className="container">
-                <button className="btn btn-danger mr-2">Clear</button>
-                <button className="btn btn-primary" onClick={this.handleAdd}>Add</button>
+                <button className="btn btn-danger mr-2"
+                        onClick={()=>this.setState({...this.state, roomData: {...initialData}})}>
+                  Clear
+                </button>
+                <button disabled={this.props.ui.loading} className="btn btn-primary" onClick={this.handleAdd}>Add</button>
               </div>
             </div>
           </div>
@@ -408,4 +536,4 @@ class AddRoomComponent extends React.Component {
     )
   }
 }
-export default AddRoomComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(AddRoomComponent);

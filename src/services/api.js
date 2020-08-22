@@ -6,12 +6,24 @@ import { setUnauthenticated } from "../redux/actions/authAction";
 import checkJwtExpiry from "../utils/checkJwtExpiry";
 import pushNotify from "../utils/pushNotify";
 fetch.Promise = Bluebird;
-
-async function refreshAccessToken() {
+async function handleResponse(res) {
+  if(!res.ok) {
+    throw await res.json();
+  }
+  return await res.json();
+}
+function refreshAccessToken() {
   if(!checkJwtExpiry(localStorage.getItem("c_token"))) {
-    await api.post("/users/refresh", {
-      refreshToken: localStorage.getItem("r_token")
-    }).then(data => {
+    return fetch(API_URL+"/users/refresh", {
+      method: "post",
+      body: JSON.stringify({
+        refreshToken: localStorage.getItem("r_token")
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(handleResponse)
+      .then(data => {
       localStorage.setItem("c_token", data.accessToken);
     }).catch(e => {
       pushNotify({title: "Error", message: "Phiên đăng nhập của bạn đã hết hạn", type: "warning"});
@@ -20,45 +32,19 @@ async function refreshAccessToken() {
   }
 }
 const api = {
-  get: (path) => {
-    return new Promise((resolve, reject) =>
-       fetch(`${API_URL}${path}`)
-         .then(res => res.json())
-         .then(body => {
-           resolve(body);
-         }).catch(err => {
-           reject(err)
-        })
-   );
-  },
-  post: (path, data) => {
+  get: async (path) => {
     const option = {
-      method: "post",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
+      method: "get"
     }
-    return new Promise((resolve, reject) =>
-      fetch(`${API_URL}${path}`, option)
-        .then(res => res.json())
-        .then(body => {
-          resolve(body);
-        }).catch(err => {
-          reject(err)
-        })
-    );
-  },
-  getWithAuth: async (path) => {
-    await refreshAccessToken();
-    const option = {
-      method: "get",
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem('c_token'),
-        "Content-Type": "application/json"
+    if(!!localStorage.getItem('r_token')) {
+      await refreshAccessToken();
+      option.headers = {
+          "Authorization": "Bearer " + localStorage.getItem('c_token')
       }
     }
     return new Promise((resolve, reject) =>
       fetch(`${API_URL}${path}`, option)
-        .then(res => res.json())
+        .then(handleResponse)
         .then(body => {
           resolve(body);
         }).catch(err => {
@@ -66,23 +52,45 @@ const api = {
         })
     );
   },
-  postWithAuth: async (path, data) => {
-    await refreshAccessToken();
+  post: async (path, data) => {
     const option = {
       method: "post",
       body: JSON.stringify(data),
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem('c_token')
+        'Content-Type': 'application/json'
       }
+    }
+    if(!!localStorage.getItem('r_token')) {
+      await refreshAccessToken();
+      option.headers["Authorization"] = "Bearer " + localStorage.getItem('c_token')
     }
     return new Promise((resolve, reject) =>
       fetch(`${API_URL}${path}`, option)
-        .then(res => res.json())
+        .then(handleResponse)
         .then(body => {
           resolve(body);
         }).catch(err => {
           reject(err)
         })
+    );
+  },
+  uploadFile: async (data) => {
+    await refreshAccessToken();
+    const option = {
+      method: "post",
+      body: data,
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem('c_token')
+      }
+    }
+    return new Promise((resolve, reject) =>
+      fetch(`${API_URL}/images`, option)
+        .then(handleResponse)
+        .then(body => {
+          resolve(body);
+        }).catch(err => {
+        reject(err);
+      })
     );
   }
 }

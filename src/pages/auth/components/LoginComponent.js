@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { loginUser } from "../../../redux/actions/authAction";
 import { connect } from "react-redux";
 import {Spinner} from "react-bootstrap";
+import { mapStateToProps, mapDispatchToProps } from "../../../redux/store";
+import api from "../../../services/api";
+import pushNotify from "../../../utils/pushNotify";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -13,24 +15,45 @@ class LoginComponent extends React.Component {
     }
   }
   handleChange = (e) => {
+    const {id, value} = e.target;
     this.setState({
       ...this.state,
-      [e.target.id]: e.target.value
+      [id]: value
     });
   }
   handleLogin = () => {
-    const userData = this.state;
-    this.props.loginUser(userData, this.props.history);
+    if(this.state.phoneNumber && this.state.password){
+      const userData = this.state;
+      this.props.setLoading();
+      api.post("/users/login", userData)
+        .then(async data => {
+          localStorage.setItem("r_token", data.refreshToken);
+          localStorage.setItem("c_token", data.accessToken);
+          const user = await api.get("/users/me");
+          localStorage.setItem("userInfo", JSON.stringify(user));
+          pushNotify({title: "Success", message: "Logged successful"})
+          this.props.setAuthenticated();
+          this.props.clearUi();
+        }).catch(err => {
+        console.log(err);
+        pushNotify({title: "Error", message: err.messages, type: "danger"});
+        this.props.clearUi();
+      });
+    } else {
+      pushNotify({title: "Lỗi", message: "Bạn vui lòng điền đầy đủ các trường", type: "danger"});
+    }
+
   }
   render() {
     const { ui } = this.props;
-    const {phoneNumber, password} = this.state;
+    const { phoneNumber, password } = this.state;
     return (
       <div className="col-12 col-md-5">
         <div className="container border-left text-center">
           <div className="h3 pl-2 text-left text-secondary">Đăng nhập</div>
-          <div className="login-form"
-               onKeyPress={e => e.key==="Enter" && !(phoneNumber&&password) && this.handleLogin()}>
+          <div className="login-form" onKeyPress={e => {
+                 if(e.key === "Enter") this.handleLogin();
+               }}>
             <div className="form-group text-left">
               <label className="text-icon">Số điện thoại</label>
               <input type="text" id="phoneNumber" className="form-control box-border-radius p-4"
@@ -46,8 +69,7 @@ class LoginComponent extends React.Component {
               />
             </div>
             <div className="col-md-12 text-right">
-              <button type="submit" disabled={!(phoneNumber&&password)}
-                      className="btn btn-light box-border-radius text-icon"
+              <button type="submit" className="btn btn-light box-border-radius text-icon"
                       onClick={this.handleLogin}>
                 {ui.loading && <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />}
                 Đăng nhập
@@ -64,10 +86,4 @@ class LoginComponent extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-    ui: state.ui
-  }
-}
-export default connect(mapStateToProps, {loginUser})(LoginComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
