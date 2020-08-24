@@ -106,7 +106,7 @@ class RegisterComponent extends React.Component {
             }}>
               <label className="text-icon">Tên của bạn</label>
               <input type="text" id="fullName" className="form-control box-border-radius p-4"
-                     placeholder="Enter your full name" value={fullName.value}
+                     placeholder="Tên đầy đủ" value={fullName.value}
                      onBlur={this.validateInput} onChange={this.handleChange}
               />
               <span className="help-block small text-danger">{fullName.error}</span>
@@ -115,7 +115,7 @@ class RegisterComponent extends React.Component {
               <label className="text-icon">Số điện thoại</label>
               <p className="text-danger text-left small">{}</p>
               <input type="text" id="phoneNumber" className="form-control box-border-radius p-4"
-                     placeholder="Enter your phone number " value={phoneNumber.value}
+                     placeholder="Số điện thoại " value={phoneNumber.value}
                      onChange={this.handleChange} onBlur={this.validateInput}
               />
               <span className="help-block small text-danger">{phoneNumber.error}</span>
@@ -123,7 +123,7 @@ class RegisterComponent extends React.Component {
             <div className="form-group text-left">
               <label className="text-icon">Mật khẩu</label>
               <input type="password" id="password"  className="form-control box-border-radius p-4"
-                     placeholder="Enter Password" value={password.value}
+                     placeholder="Mật khẩu" value={password.value}
                      onChange={this.handleChange} onBlur={this.validateInput}
               />
               <span className="help-block small text-danger">{password.error}</span>
@@ -133,7 +133,7 @@ class RegisterComponent extends React.Component {
               <div className="form-group text-left animated">
                 <label className="text-icon">Nhập lại mật khẩu</label>
                 <input type="password" id="rePassword"  className="form-control box-border-radius p-4"
-                       placeholder="Re-enter your password" value={rePassword.value}
+                       placeholder="Xác nhận mật khẩu" value={rePassword.value}
                        onChange={this.handleChange} onBlur={this.validateInput}
                 />
                 <span className="help-block small text-danger">{rePassword.error}</span>

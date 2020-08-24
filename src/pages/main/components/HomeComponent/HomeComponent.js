@@ -83,31 +83,33 @@ class HomeComponent extends React.Component {
                 }
               </div>
               <div className="card-footer">
-                {ui.loading ?
-                  <Skeleton circle={true}/> :
-                  <ReactPaginate
-                    previousLabel={'«'}
-                    nextLabel={'»'}
-                    breakLabel={''}
-                    breakClassName={'page-item'}
-                    breakLinkClassName={"page-link"}
-                    pageCount={Math.ceil(searchedRooms.summary/10)}
-                    forcePage={searchedRooms.page}
-                    initialPage={searchedRooms.page}
-                    onPageChange={this.handlePageChange}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={3}
-                    containerClassName={'pagination justify-content-end'}
-                    pageClassName={"page-item"}
-                    pageLinkClassName={"page-link"}
-                    activeClassName={'active'}
-                    nextClassName={"page-item"}
-                    nextLinkClassName={"page-link"}
-                    previousClassName={"page-item"}
-                    previousLinkClassName={"page-link"}
-                    disabledClassName={"disabled"}
-                  />
-                }
+                <div className="nex-page-ui">
+                  {ui.loading ?
+                    <Skeleton circle={true}/> :
+                    <ReactPaginate
+                      previousLabel={'«'}
+                      nextLabel={'»'}
+                      breakLabel={''}
+                      breakClassName={'page-item'}
+                      breakLinkClassName={"page-link"}
+                      pageCount={Math.ceil(searchedRooms.summary/10)}
+                      forcePage={searchedRooms.page}
+                      initialPage={searchedRooms.page}
+                      onPageChange={this.handlePageChange}
+                      marginPagesDisplayed={1}
+                      pageRangeDisplayed={3}
+                      containerClassName={'pagination justify-content-end'}
+                      pageClassName={"page-item"}
+                      pageLinkClassName={"page-link"}
+                      activeClassName={'active'}
+                      nextClassName={"page-item"}
+                      nextLinkClassName={"page-link"}
+                      previousClassName={"page-item"}
+                      previousLinkClassName={"page-link"}
+                      disabledClassName={"disabled"}
+                    />
+                  }
+                  </div>
               </div>
             </div>
           </div>

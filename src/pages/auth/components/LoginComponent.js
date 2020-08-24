@@ -57,14 +57,14 @@ class LoginComponent extends React.Component {
             <div className="form-group text-left">
               <label className="text-icon">Số điện thoại</label>
               <input type="text" id="phoneNumber" className="form-control box-border-radius p-4"
-                     placeholder="Enter your phone number" value={phoneNumber}
+                     placeholder="Số điện thoại..." value={phoneNumber}
                      onChange={this.handleChange}
               />
             </div>
             <div className="form-group text-left">
               <label className="text-icon">Mật khẩu</label>
               <input type="password" id="password" className="form-control box-border-radius p-4"
-                     placeholder="Enter password..." value={password}
+                     placeholder="Mật khẩu..." value={password}
                      onChange={this.handleChange}
               />
             </div>
@@ -77,7 +77,7 @@ class LoginComponent extends React.Component {
             </div>
             <div className="form-group">
               <p className="text-secondary text-left small">
-                Don't have account? <Link to="register">Register here</Link>
+                Chưa có tài khoản ? <Link to="register"> Đăng kí ngay</Link>
               </p>
             </div>
           </div>
