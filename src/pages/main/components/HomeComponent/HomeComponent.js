@@ -28,7 +28,7 @@ class HomeComponent extends React.Component {
     document.title = "Fogo - Ứng dụng tìm phòng trọ miễn phí";
     this.props.setLoading();
     Promise.all([
-      api.post("/rooms/search", {page: this.state.searchedRooms.page+1}),
+      api.post("/rooms/search", {page: this.state.searchedRooms.page+1, type: {$ne: "Shared"}}),
       api.post("/rooms/search", {type: "Shared", limit: 5})
     ]).then(data => {
       this.setState(state => {
@@ -47,7 +47,7 @@ class HomeComponent extends React.Component {
   }
   handlePageChange = (e) => {
     this.props.setLoading();
-    api.post("/rooms/search", {page: e.selected+1})
+    api.post("/rooms/search", {page: e.selected+1, type: {$ne: "Shared"}})
       .then(data => {
         this.setState(state => {
           state.searchedRooms.data = data.data;

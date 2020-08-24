@@ -35,16 +35,16 @@ class SearchRoomItem extends React.Component {
     return (
       <div key={"search-"+data.id}>
         <Link className="row room-preview" to={"/rooms/"+data.id}>
-          <div className="col-md-4">
+          <div className="col-sm-4">
             <img className="room-thumbnail" alt="Room thumbnail" src={data?.images[0]}/>
           </div>
-          <div className="col-md-8 text-dark">
+          <div className="col-sm-8 mt-3 mt-sm-0 text-dark">
             <h4>{data.name}</h4>
             <div className="row">
               <div className="col-9">
                 <div className="row text-black-50">
                   <div className="col-12">
-                    <i className="fas fa-house-user text-icon"/>
+                    <i className="fas fa-house-user text-icon mr-2"/>
                     <span>
                   {
                     data.type === "Dormitory"?"Kí túc xá":
@@ -55,19 +55,19 @@ class SearchRoomItem extends React.Component {
                 </span>
                   </div>
                   <div className="col-md-6">
-                    <i className="fas fa-ruler text-icon"/>
-                    <span> {data.area} m²</span>
+                    <i className="fas fa-ruler text-icon mr-2"/>
+                    <span>{data.area} m²</span>
                   </div>
                   <div className="col-12">
-                    <i className="fas fa-venus-mars text-icon"/>
-                    <span> {
+                    <i className="fas fa-venus-mars text-icon mr-2"/>
+                    <span>{
                       data.gender === "any" ? "Nam hoặc nữ":
                         data.gender === "male" ? "Nam" : "Nữ"
                     }</span>
                   </div>
                   <div className="col-12">
-                    <i className="fas fa-map-marker-alt text-icon"/>
-                    <span> {data.address}</span>
+                    <i className="fas fa-map-marker-alt text-icon mr-2"/>
+                    <span>{data.address}</span>
                   </div>
                 </div>
               </div>

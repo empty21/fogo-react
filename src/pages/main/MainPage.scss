@@ -44,7 +44,11 @@ img.room-thumbnail {
   -webkit-box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
   -moz-box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
   box-shadow: 18px 20px 15px -15px rgba(0,0,0,0.2);
-  opacity: 90%;
+  opacity: 0.9;
+}
+img.shared-room {
+  height: 100px;
+  max-height: 100px;
 }
 /*SEARCH BAR*/
 #search-box{
