@@ -67,6 +67,7 @@ class AddRoomComponent extends React.Component {
 
   }
   handleAdd = (e) => {
+    this.props.setLoading();
     const { roomData } = this.state;
     const data = {
       "owner": {

@@ -39,11 +39,13 @@ class SharedRoomItem extends React.Component {
             <img className="room-thumbnail shared-room" alt="Room thumbnail" src={data?.images[0]}/>
           </div>
           <div className="col-6 text-center text-fogo">
-            <h3>{(data.price.value).toLocaleString()}</h3>
+            <h3>{(data.price.value).toLocaleString("vi-VN")}</h3>
             <p className="small">tr/{data.price.unit}</p>
             {this.props.isAuthenticated &&
-            <i className={`fas fa-eye h3 ${data.isFollowed ? "text-fogo" : "text-secondary"}`}
-               onClick={this.handleFollow}/>}
+              <span className={`h3 ${data.isFollowed ? "text-fogo" : "text-secondary"}`} onClick={this.handleFollow}>
+                <i className={`fas fa-eye mr-1`}/> ({data.nOFollowers})
+              </span>
+            }
           </div>
             <div className="container-fluid">
               <div className="row text-black-50">

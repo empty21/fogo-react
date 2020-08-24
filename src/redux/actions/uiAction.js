@@ -1,11 +1,11 @@
 import {SET_LOADING, CLEAR_UI} from "../types";
 
-export const setLoading = () => dispatch => {
+export const setLoading = () => {
   return {
     type: SET_LOADING
   }
 }
-export const clearUi = () => dispatch => {
+export const clearUi = () => {
   return {
     type: CLEAR_UI
   };

@@ -30,7 +30,7 @@ export class RoomDetailsComponent extends React.Component {
           lightBoxOpen: false
         })
         this.props.clearUi();
-      }).catch((e) => {
+      }).catch(() => {
         this.props.clearUi();
         pushNotify({title: "Lỗi", message: "Lấy dữ liệu thất bại", type: "danger"});
     });
@@ -48,6 +48,26 @@ export class RoomDetailsComponent extends React.Component {
       ...this.state,
       lightBoxOpen: false
     })
+  }
+  handleFollow = (e) => {
+    e.preventDefault();
+    api.post("/rooms/"+this.state.room._id+"/follow")
+    .then(() => {
+      this.setState(state => {
+        if(state.room.isFollowed) {
+          state.room.isFollowed = false;
+          state.room.nOFollowers--;
+          pushNotify({title: "Success", message: "Đã huỷ quan tâm phòng"});
+        } else {
+          state.room.isFollowed = true;
+          state.room.nOFollowers++;
+          pushNotify({title: "Success", message: "Đã thêm phòng vào danh sách quan tâm"});
+        }
+        return state;
+      });
+    }).catch(e => {
+      pushNotify({title: "Error", message: "Lỗi khi thêm phòng vào danh sách quan tâm", type: "danger"});
+    });
   }
   render() {
     const {room, photoIndex, lightBoxOpen } = this.state;
@@ -70,7 +90,14 @@ export class RoomDetailsComponent extends React.Component {
             <div className="col-md-8">
               <div className="card">
                 <div className="card-header">
-                  <span><i className="fas fa-edit text-fogo"/> Thông tin phòng</span>
+                  <span className="mr-auto"><i className="fas fa-edit text-fogo"/> Thông tin phòng</span>
+                  {room &&
+                    <span className={`h3 float-right`}
+                          onClick={this.handleFollow}>
+                      <i className={`fas fa-eye mr-1 ${room.isFollowed ? "text-fogo" : "text-secondary"}`}/>
+                      ({room.nOFollowers})
+                    </span>
+                  }
                 </div>
                 <div className="card-body">
                   {ui.loading && <Skeleton/>}

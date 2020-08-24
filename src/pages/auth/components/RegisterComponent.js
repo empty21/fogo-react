@@ -34,6 +34,9 @@ class RegisterComponent extends React.Component {
       }
     }
   }
+  componentDidMount() {
+    document.title = "Fogo - Register"
+  }
 
   handleRegister = () => {
     const { phoneNumber, fullName, password, rePassword } = this.state;

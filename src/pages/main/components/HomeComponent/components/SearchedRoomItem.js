@@ -5,7 +5,7 @@ import pushNotify from "../../../../../utils/pushNotify";
 import {mapStateToProps} from "../../../../../redux/store";
 import { connect } from "react-redux";
 
-class SearchRoomItem extends React.Component {
+class SearchedRoomItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +17,13 @@ class SearchRoomItem extends React.Component {
     api.post("/rooms/"+this.state.data.id+"/follow")
       .then(() => {
         this.setState(state => {
-          state.data.isFollowed = !state.data.isFollowed;
+          if(state.data.isFollowed) {
+            state.data.isFollowed = false;
+            state.data.nOFollowers--;
+          } else {
+            state.data.isFollowed = true;
+            state.data.nOFollowers++;
+          }
           return state;
         });
         if(this.state.data.isFollowed) {
@@ -72,11 +78,13 @@ class SearchRoomItem extends React.Component {
                 </div>
               </div>
               <div className="col-3 text-center text-fogo">
-                <h3>{(data.price.value).toLocaleString()}</h3>
+                <h3>{(data.price.value).toLocaleString("vi-VN")}</h3>
                 <p className="small">tr/{data.price.unit}</p>
                 {this.props.isAuthenticated &&
-                <i className={`fas fa-eye h3 ${data.isFollowed ? "text-fogo" : "text-secondary"}`}
-                   onClick={this.handleFollow}/>}
+                  <span className={`h3 ${data.isFollowed ? "text-fogo" : "text-secondary"}`} onClick={this.handleFollow}>
+                    <i className={`fas fa-eye mr-1`}/> ({data.nOFollowers})
+                  </span>
+                }
               </div>
             </div>
           </div>
@@ -85,4 +93,4 @@ class SearchRoomItem extends React.Component {
     );
   }
 }
-export default connect(mapStateToProps)(SearchRoomItem);
+export default connect(mapStateToProps)(SearchedRoomItem);

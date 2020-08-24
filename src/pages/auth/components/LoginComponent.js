@@ -14,6 +14,10 @@ class LoginComponent extends React.Component {
       password: ""
     }
   }
+  componentDidMount() {
+    document.title = "Fogo - Login"
+  }
+
   handleChange = (e) => {
     const {id, value} = e.target;
     this.setState({
