@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { connect } from "react-redux";
+import { mapStateToProps } from "../../../redux/store";
 
 export class HeaderComponent extends React.Component {
   render() {
@@ -29,11 +30,11 @@ export class HeaderComponent extends React.Component {
               </ul>
               <ul className="navbar-nav ml-auto">
                 {this.props.isAuthenticated ?
-                  <li class="nav-item dropdown">
-                    <Link class="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">
-                      {localStorage.getItem("username")}
+                  <li className="nav-item dropdown">
+                    <Link className="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">
+                      {this.props?.userInfo?.fullName}
                     </Link>
-                    <div class="dropdown-menu">
+                    <div className="dropdown-menu">
                       <Link className="dropdown-item" to="#">Profile</Link>
                       <div className="dropdown-divider" />
                       <Link className="dropdown-item" to="/auth/logout">Log out</Link>
@@ -51,10 +52,5 @@ export class HeaderComponent extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    ui: state.ui,
-    isAuthenticated: state.user.isAuthenticated
-  }
-}
+
 export default connect(mapStateToProps)(HeaderComponent);
