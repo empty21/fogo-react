@@ -15,6 +15,7 @@ const validVietnameseName = (name) => {
   return regex.test(name);
 }
 function RegisterComponent(props) {
+  document.title = "Fogo - Đăng ký";
   const { register, handleSubmit, errors, getValues } = useForm();
   const doRegister = (data) => {
     props.setLoading();

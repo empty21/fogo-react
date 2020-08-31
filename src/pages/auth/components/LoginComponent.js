@@ -8,6 +8,7 @@ import api from "../../../services/api";
 import pushNotify from "../../../utils/pushNotify";
 
 function LoginComponent(props) {
+  document.title = "Fogo - Đăng nhập";
   const { register, handleSubmit } = useForm();
   const doLogin = (data) => {
     props.setLoading();

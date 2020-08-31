@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import MessengerChat from "react-messenger-customer-chat";
 import "./MainPage.scss";
 import HeaderComponent from "./components/HeaderComponent";
@@ -27,6 +27,7 @@ function MainPage() {
         <Route path="/rooms/:id" component={RoomDetailsComponent}/>
         <AuthRoute exact path="/me/followed" component={AddRoomComponent} />
         <AuthRoute exact path="/me/rooms" component={AddRoomComponent} />
+        <Route path="*"><Redirect to="/404"/></Route>
       </Switch>
       <FooterComponent />
     </React.Fragment>

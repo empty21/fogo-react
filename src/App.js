@@ -22,7 +22,7 @@ class App extends React.Component {
         <Switch>
           <Route path="/auth" component={AuthPage} />
           <AuthRoute path="/admin" requiredRole={1} component={AdminPage} />
-          <Route path="/404" component={NotFoundPage} />
+          <Route exact path="/404" component={NotFoundPage} />
           <Route path="/" component={MainPage} />
         </Switch>
       </React.Fragment>
