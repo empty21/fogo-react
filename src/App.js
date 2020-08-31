@@ -7,22 +7,25 @@ import "react-notifications-component/dist/theme.css";
 import "./App.scss";
 import "jquery";
 import "popper.js";
-import routes from "./routes";
 import ReactNotification from "react-notifications-component";
+import AuthRoute from "./utils/authRoute";
+import AuthPage from "./pages/auth/AuthPage";
+import AdminPage from "./pages/admin/AdminPage";
+import MainPage from "./pages/main/MainPage";
+import NotFoundPage from "./pages/error/NotFoundPage";
 
 class App extends React.Component {
   render() {
     return(
-      <div>
+      <React.Fragment>
         <ReactNotification />
         <Switch>
-          {
-            routes.map(route =>
-              <Route key={route.key} exact={route.exact} component={route.component} path={route.path} />
-            )
-          }
+          <Route path="/auth" component={AuthPage} />
+          <AuthRoute path="/admin" requiredRole={1} component={AdminPage} />
+          <Route path="/404" component={NotFoundPage} />
+          <Route path="/" component={MainPage} />
         </Switch>
-      </div>
+      </React.Fragment>
     );
   }
 }

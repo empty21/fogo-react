@@ -15,11 +15,6 @@
   padding-left: 5%;
   color :white;
 }
-.fa-ruler, .fa-venus-mars,.fa-map-marker-alt,.fa-house-user,.fa-bed, .fa-box, .fa-bicycle, .fa-dumpster-fire, .fa-utensils, .fa-columns, .fa-shower, .fa-wifi, .fa{
-  color:#495F8C;
-  margin-right: 10px;
-  margin-bottom: 5px;
-}
 .showcase-share {
   padding-top: 100px;
 }
@@ -69,15 +64,14 @@ img.shared-room {
 #search-box{
   padding-left:0;
   position:relative;
-  opacity: 70%;
+  opacity: 0.7;
   transition: all 0.7s;
 }
 #search-box:hover{
-  opacity:100%;
-  transform: 1.01;
+  opacity: 1;
+  transform: inherit;
 }
 #search-box input{
-
   width:100%;
   border:0;
   height:60px;
@@ -174,4 +168,22 @@ img.thumbnail {
   padding: 0px;
   border-top: 0px;
   background-color:white;
+}
+img.preview {
+  height: 100px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+#search-suggestion:hover {
+  display: block;
+}
+#search-input:focus ~ #search-suggestion {
+  display: block;
+}
+#search-suggestion {
+  display: none;
+}
+.suggestion-item:hover {
+  transform: scale(1.05);
 }

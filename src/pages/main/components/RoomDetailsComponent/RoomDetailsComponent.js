@@ -1,5 +1,5 @@
-import React from "react";
-import {  Breadcrumb } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import { Breadcrumb, Container, Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import api from "../../../../services/api";
 import Lightbox from "react-image-lightbox";
@@ -9,320 +9,335 @@ import { connect } from "react-redux";
 import { mapStateToProps, mapDispatchToProps} from "../../../../redux/store";
 import pushNotify from "../../../../utils/pushNotify";
 
-export class RoomDetailsComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      photoIndex: 0,
-      isLoaded: false,
-      lightBoxOpen: false,
-      room: null
-    };
-  }
-  componentDidMount() {
-    const roomId = this.props.match.params.id;
-    this.props.setLoading();
+function RoomDetailsComponent(props) {
+  const roomId = props.match.params.id;
+  const { setLoading, clearUi, history } = props;
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [lightBoxOpen, setLightBoxOpen] = useState(false);
+  const [room, setRoom] = useState(null);
+  const [isFollowed, setIsFollowed] = useState(null);
+  const [followers, setFollowers] = useState(null);
+
+  useEffect(() => {
+    setLoading();
+    document.title = "Fogo - Loading...";
     api.get(`/rooms/${roomId}`)
-      .then(data => {
-        this.setState({
-          ...this.state,
-          room: data,
-          lightBoxOpen: false
-        })
-        this.props.clearUi();
-      }).catch(() => {
-        this.props.clearUi();
-        pushNotify({title: "Lỗi", message: "Lấy dữ liệu thất bại", type: "danger"});
-    });
-  }
-  openLightBox = (e) => {
+    .then(data => {
+      setRoom(data);
+    }).catch((err) => {
+      pushNotify({title: "Lỗi", message: err.messages, type: "danger"});
+      history.push("/404");
+    }).finally(() => {
+      clearUi();
+    })
+  }, [roomId, setLoading, clearUi, history]);
+  useEffect(() => {
+    if(room) {
+      document.title = "Fogo - " + room.details.name;
+      setFollowers(room.followers);
+      setIsFollowed(room.isFollowed);
+    }
+  }, [room])
+  const openLightBox = (e) => {
     const id = e.target.id.split("-")[1];
-    this.setState({
-      ...this.state,
-      photoIndex: id,
-      lightBoxOpen: true
-    })
+    setPhotoIndex(id);
+    setLightBoxOpen(true);
   }
-  closeLightBox = () => {
-    this.setState({
-      ...this.state,
-      lightBoxOpen: false
-    })
-  }
-  handleFollow = (e) => {
+  const handleFollow = (e) => {
     e.preventDefault();
-    api.post("/rooms/"+this.state.room._id+"/follow")
-    .then(() => {
-      this.setState(state => {
-        if(state.room.isFollowed) {
-          state.room.isFollowed = false;
-          state.room.nOFollowers--;
+    api.post("/rooms/"+room._id+"/follow")
+      .then(() => {
+        if(isFollowed) {
           pushNotify({title: "Success", message: "Đã huỷ quan tâm phòng"});
         } else {
-          state.room.isFollowed = true;
-          state.room.nOFollowers++;
           pushNotify({title: "Success", message: "Đã thêm phòng vào danh sách quan tâm"});
         }
-        return state;
-      });
-    }).catch(e => {
+        setIsFollowed(!isFollowed);
+        setFollowers(isFollowed ? followers-1 : followers+1);
+      }).catch(e => {
       pushNotify({title: "Error", message: "Lỗi khi thêm phòng vào danh sách quan tâm", type: "danger"});
     });
   }
-  render() {
-    const {room, photoIndex, lightBoxOpen } = this.state;
-    const { ui } = this.props;
-    document.title = room ? "Fogo - "+room.details.name : "Fogo - Loading...";
-    return (
-      <div className="main">
-        <div className="container-fluid">
-          {ui.loading && <Skeleton/>}
-          {room &&
-          <Breadcrumb className="pt-5">
-            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-            <li className="breadcrumb-item"><Link to="#">{room.address.district.text}</Link></li>
-            <li className="breadcrumb-item"><Link to="#">{room.address.ward.text}</Link></li>
-            <li className="breadcrumb-item active">{room.details.name}</li>
-          </Breadcrumb>
-          }
-
-          <div className="row">
-            <div className="col-md-8">
-              <div className="card">
-                <div className="card-header">
-                  <span className="mr-auto"><i className="fas fa-edit text-fogo"/> Thông tin phòng</span>
-                  {room &&
-                    <span className={`h3 float-right`}
-                          onClick={this.handleFollow}>
-                      <i className={`fas fa-eye mr-1 ${room.isFollowed ? "text-fogo" : "text-secondary"}`}/>
-                      ({room.nOFollowers})
-                    </span>
-                  }
-                </div>
-                <div className="card-body">
-                  {ui.loading && <Skeleton/>}
-                  {room &&
-                  <div className="row">
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Giá phòng</div>
-                      {room.details.price.value.toLocaleString("en-US")}
-                      tr/
-                      {room.details.price.unit}
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Diện tích</div>
-                      {room.details.area} m²
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Đặt cọc</div>
-                      {room.details.deposit}
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Sức chứa</div>
-                      <span>{room.details?.capacity}
-                      {room.details.gender === "any" ? "nam hoặc nữ" :
-                        room.details.gender === "male" ? "nam" : "nữ"}</span>
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Điện</div>
-                      {room.details.additionalFee.electric.value}
-                      k/
-                      {room.details.additionalFee.electric.unit}
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Nước</div>
-                      {room.details.additionalFee.water.value}
-                      k/
-                      {room.details.additionalFee.water.unit}
-                    </div>
-                    <div className="col-6 col-md-3">
-                      <div className="lead text-muted">Phí khác</div>
-                      {room.details.additionalFee.other || "Không có"}
-                    </div>
-                    <div className="col-12">
-                      <div className="lead text-muted">Địa chỉ</div>
-                      {room.address.street + ", " +
-                      room.address.ward.text + ", " +
-                      room.address.district.text + ", " +
-                      room.address.city.text}
-                    </div>
-                  </div>
-                  }
-
-
-                </div>
-              </div>
-              <div className="card mt-3">
-                <div className="card-header">
-                  <span><i className="fas fa-star text-fogo"/> Tiện ích</span>
-                </div>
-                <div className="card-body">
-                  {ui.loading && <Skeleton/>}
-                  {room &&
-                    <div className="row">
-                      {room.utils?.airConditioner &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-fan text-main"/>
-                        <span>Điều hòa</span>
-                      </div>
-                      }
-                      {room.utils?.balcony &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-kaaba text-main"/>
-                        <span>Ban công</span>
-                      </div>
-                      }
-                      {room.utils?.closet &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-box text-main"/>
-                        <span>Tủ đồ</span>
-                      </div>
-                      }
-                      {room.utils?.bed &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-bed text-main"/>
-                        <span>Giường</span>
-                      </div>
-                      }
-                      {room.utils?.bathroom &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-shower text-main"/>
-                        <span>Phòng tắm</span>
-                      </div>
-                      }
-                      {room.utils?.cookingAllowed &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-utensils text-main"/>
-                        <span>Nấu ăn</span>
-                      </div>
-                      }
-                      {room.utils?.fridge &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-door-open text-main"/>
-                        <span>Tủ lạnh</span>
-                      </div>
-                      }
-                      {room.utils?.garret &&
-                      <div className="col-6 col-md-3 lead">
-                        <i className="fas fa-warehouse text-main"/>
-                        <span>Gác xép</span>
-                      </div>
-                      }
-                      {room.utils?.parkingArea &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-bicycle text-main"/>
-                        <span>Gửi xe</span>
-                      </div>
-                      }
-                      {!room.utils?.liveWithOwner &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-key text-main"/>
-                        <span>Tự do</span>
-                      </div>
-                      }
-                      {room.utils?.petsAllowed &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-paw text-main"/>
-                        <span>Thú cưng</span>
-                      </div>
-                      }
-                      {room.utils?.television &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-tv text-main"/>
-                        <span>Tivi</span>
-                      </div>
-                      }
-                      {room.utils?.washingMachine &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-dumpster text-main"/>
-                        <span>Máy giặt</span>
-                      </div>
-                      }
-                      {room.utils?.waterHeater &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-dumpster-fire text-main"/>
-                        <span>Máy nóng lạnh</span>
-                      </div>
-                      }
-                      {room.utils?.wifi &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-wifi text-main"/>
-                        <span>Wifi</span>
-                      </div>
-                      }
-                      {room.utils?.window &&
-                      <div className="col-6 col-md-3 lead mr-1">
-                        <i className="fas fa-columns text-main"/>
-                        <span>Cửa sổ</span>
-                      </div>
-                      }
-                    </div>
-                  }
-                </div>
-              </div>
-              <div className="card mt-3">
-                <div className="card-header">
-                  <span><i className="fas fa-info-circle text-fogo"/> Mô tả chi tiết</span>
-                </div>
-                <div className="card-body">
-                  {ui.loading && Skeleton}
-                  {room &&
-                    <p>{room.details.note}</p>
-                  }
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 pt-3 pt-md-0">
-              <div className="card">
-                <div className="card-header">
-                  <span><i className="fas fa-images text-fogo"/> Hình ảnh</span>
-                </div>
-                <div className="card-body">
-
-
-                  {room&&<div className="row">
-                    {room.images.map((url, i) =>
-                      <Link to="#" title={"Image " + i}>
-                        <img className="thumbnail p-1" alt="" id={"image-" + i}
-                             src={url} onClick={this.openLightBox}/>
-                      </Link>
-                    )}
-                  </div>}
-                </div>
-              </div>
-              <div className="card mt-3">
-                <div className="card-header">
-                  <span><i className="fas fa-exclamation text-fogo"/> Một số lưu ý</span>
-                </div>
-                <div className="card-body">
-                  {ui.loading && <Skeleton/>}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {
-          lightBoxOpen &&
-          <Lightbox
-            mainSrc={room.images[photoIndex]}
-            nextSrc={room.images[(photoIndex + 1) % room.images.length]}
-            prevSrc={room.images[(photoIndex + room.images.length - 1) % room.images.length]}
-            onCloseRequest={this.closeLightBox}
-            onMovePrevRequest={() =>
-              this.setState({
-                photoIndex: (photoIndex + room.images.length - 1) % room.images.length,
-              })
+  return (
+    <React.Fragment>
+      <Container fluid={true}>
+        {props.ui.loading && <Skeleton/>}
+        {room &&
+        <Breadcrumb className="pt-5">
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}} >Home</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>{room.address.district.text}</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>{room.address.ward.text}</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>
+            {room.details.name}
+            {room.disabled &&
+              <span className="small"> (Phòng chưa được duyệt)</span>
             }
-            onMoveNextRequest={() =>
-              this.setState({
-                photoIndex: (photoIndex + 1) % room.images.length,
-              })
-            }
-            enableZoom={false}
-          />
+          </Breadcrumb.Item>
+        </Breadcrumb>
         }
-      </div>
-    );
-  }
+
+        <Row className="mt-3">
+          <Col md={8}>
+            <Card>
+              <Card.Header>
+                <span>
+                  <i className="fas fa-edit text-fogo"/>
+                  Thông tin phòng
+                </span>
+                {room &&
+                  <span className={`float-right`}
+                        onClick={handleFollow}>
+                    <i className={`fas fa-eye mr-2 ${isFollowed ? "text-fogo" : "text-secondary"}`}/>
+                    <sub>{followers}</sub>
+                  </span>
+                }
+              </Card.Header>
+              <Card.Body>
+                {props.ui.loading && <Skeleton/>}
+                {room &&
+                <Row xs={2} md={4}>
+                  <Col>
+                    <div className="lead text-muted">Giá phòng</div>
+                    {room.details.price.value.toLocaleString("en-US")}
+                    {` tr/${room.details.price.unit}`}
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Diện tích</div>
+                    {room.details.area} m²
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Đặt cọc</div>
+                    {room.details.deposit}
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Sức chứa</div>
+                    <span>{room.details?.capacity}
+                    {" " + (room.details.gender === "any" ? "nam hoặc nữ" :
+                      room.details.gender === "male" ? "nam" : "nữ")}</span>
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Điện</div>
+                    {room.details.additionalFee.electric.value}
+                    {" k/" + room.details.additionalFee.electric.unit}
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Nước</div>
+                    {room.details.additionalFee.water.value}
+                    {" k/" + room.details.additionalFee.water.unit}
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Phí khác</div>
+                    {room.details.additionalFee.other || "Không có"}
+                  </Col>
+                  <Col>
+                    <div className="lead text-muted">Trạng thái</div>
+                    <div className="text-success">{room.status}</div>
+                  </Col>
+                  <Col xs={12} md={12}>
+                    <div className="lead text-muted">Địa chỉ</div>
+                    {room.address.houseNumber + " " +
+                    room.address.street + ", " +
+                    room.address.ward.text + ", " +
+                    room.address.district.text + ", " +
+                    room.address.city.text}
+                  </Col>
+                </Row>
+                }
+              </Card.Body>
+            </Card>
+            <Card className="mt-3">
+              <Card.Header>
+                <span><i className="fas fa-star text-fogo"/> Tiện ích</span>
+              </Card.Header>
+              <Card.Body>
+                {props.ui.loading && <Skeleton/>}
+                {room &&
+                  <Row md={4} xs={2}>
+                    {room.utils?.airConditioner &&
+                    <Col>
+                      <i className="fas fa-fan text-icon lead mr-2"/>
+                      <span className="text-muted">Điều hòa</span>
+                    </Col>
+                    }
+                    {room.utils?.balcony &&
+                    <Col>
+                      <i className="fas fa-kaaba text-icon lead mr-2"/>
+                      <span className="text-muted">Ban công</span>
+                    </Col>
+                    }
+                    {room.utils?.closet &&
+                    <Col>
+                      <i className="fas fa-box text-icon lead mr-2"/>
+                      <span className="text-muted">Tủ đồ</span>
+                    </Col>
+                    }
+                    {room.utils?.bed &&
+                    <Col>
+                      <i className="fas fa-bed text-icon lead mr-2"/>
+                      <span className="text-muted">Giường</span>
+                    </Col>
+                    }
+                    {room.utils?.bathroom &&
+                    <Col>
+                      <i className="fas fa-shower text-icon lead mr-2"/>
+                      <span className="text-muted">Phòng tắm</span>
+                    </Col>
+                    }
+                    {room.utils?.cookingAllowed &&
+                    <Col>
+                      <i className="fas fa-utensils text-icon lead mr-2"/>
+                      <span className="text-muted">Nấu ăn</span>
+                    </Col>
+                    }
+                    {room.utils?.fridge &&
+                    <Col>
+                      <i className="fas fa-door-open text-icon lead mr-2"/>
+                      <span className="text-muted">Tủ lạnh</span>
+                    </Col>
+                    }
+                    {room.utils?.garret &&
+                    <Col>
+                      <i className="fas fa-warehouse text-icon lead mr-2"/>
+                      <span className="text-muted">Gác xép</span>
+                    </Col>
+                    }
+                    {room.utils?.parkingArea &&
+                    <Col>
+                      <i className="fas fa-bicycle text-icon lead mr-2"/>
+                      <span className="text-muted">Gửi xe</span>
+                    </Col>
+                    }
+                    {!room.utils?.liveWithOwner &&
+                    <Col>
+                      <i className="fas fa-key text-icon lead mr-2"/>
+                      <span className="text-muted">Tự do</span>
+                    </Col>
+                    }
+                    {room.utils?.petsAllowed &&
+                    <Col>
+                      <i className="fas fa-paw text-icon lead mr-2"/>
+                      <span className="text-muted">Thú cưng</span>
+                    </Col>
+                    }
+                    {room.utils?.television &&
+                    <Col>
+                      <i className="fas fa-tv text-icon lead mr-2"/>
+                      <span className="text-muted">Tivi</span>
+                    </Col>
+                    }
+                    {room.utils?.washingMachine &&
+                    <Col>
+                      <i className="fas fa-dumpster text-icon lead mr-2"/>
+                      <span className="text-muted">Máy giặt</span>
+                    </Col>
+                    }
+                    {room.utils?.waterHeater &&
+                    <Col>
+                      <i className="fas fa-dumpster-fire text-icon lead mr-2"/>
+                      <span className="text-muted">Máy nóng lạnh</span>
+                    </Col>
+                    }
+                    {room.utils?.wifi &&
+                    <Col>
+                      <i className="fas fa-wifi text-icon lead mr-2"/>
+                      <span className="text-muted">Wifi</span>
+                    </Col>
+                    }
+                    {room.utils?.window &&
+                    <Col>
+                      <i className="fas fa-columns text-icon lead mr-2"/>
+                      <span className="text-muted">Cửa sổ</span>
+                    </Col>
+                    }
+                  </Row>
+                }
+              </Card.Body>
+            </Card>
+            <Card className="mt-3">
+              <Card.Header>
+                <span><i className="fas fa-info-circle text-fogo"/> Mô tả chi tiết</span>
+              </Card.Header>
+              <Card.Body>
+                {props.ui.loading && <Skeleton />}
+                {room &&
+                  <p id="details-note">{room.details.note}</p>
+                }
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card className="mt-3 mt-md-0">
+              <Card.Header>
+                <span><i className="fas fa-images text-fogo"/> Hình ảnh</span>
+              </Card.Header>
+              <Card.Body>
+                {room&&<Row>
+                  {room.images.map((url, i) =>
+                    <Link key={i} to="#" title={"Image " + i}>
+                      <img className="thumbnail p-1" alt="" id={"image-" + i}
+                           src={url} onClick={openLightBox}/>
+                    </Link>
+                  )}
+                </Row>}
+              </Card.Body>
+            </Card>
+            <Card className="mt-3">
+              <Card.Header>
+                <span><i className="fas fa-user text-fogo"/> Thông tin chủ phòng</span>
+              </Card.Header>
+              <Card.Body>
+                {props.ui.loading && <Skeleton/>}
+                {room &&
+                  <Row>
+                    <Col>
+                      {props.isAuthenticated ?
+                      <React.Fragment>
+                        Chủ phòng: <br />
+                        {room.owner.name}<br/>
+                        SĐT: <br/>
+                        {room.owner.phoneNumber}
+                      </React.Fragment> :
+                      <React.Fragment>
+                        Bạn vui lòng <Link to="/auth">đăng nhập</Link> để xem thông tin chủ phòng
+                      </React.Fragment>
+                      }
+
+                    </Col>
+                    <div className="border-right my-1"/>
+                    <Col>
+                      Ngày đăng phòng: {new Date(room.createdAt).toLocaleDateString("vi-VN")}
+                    </Col>
+                  </Row>
+                }
+              </Card.Body>
+            </Card>
+            {props?.userInfo?.role > 0 &&
+            <Card className="mt-3">
+              <Card.Header>
+                <span><i className="fas fa-cog text-fogo"/> Quản lý phòng</span>
+              </Card.Header>
+              <Card.Body>
+                {props.ui.loading && <Skeleton/>}
+              </Card.Body>
+            </Card>
+            }
+
+          </Col>
+        </Row>
+      </Container>
+      {
+        lightBoxOpen &&
+        <Lightbox
+          mainSrc={room.images[photoIndex]}
+          nextSrc={room.images[(photoIndex + 1) % room.images.length]}
+          prevSrc={room.images[(photoIndex + room.images.length - 1) % room.images.length]}
+          onCloseRequest={() => setLightBoxOpen(false)}
+          onMovePrevRequest={() => setPhotoIndex((photoIndex + room.images.length - 1) % room.images.length)}
+          onMoveNextRequest={() => setPhotoIndex((photoIndex + room.images.length + 1) % room.images.length)}
+          enableZoom={false}
+        />
+      }
+    </React.Fragment>
+  );
 }
 export default connect(mapStateToProps, mapDispatchToProps)(RoomDetailsComponent);

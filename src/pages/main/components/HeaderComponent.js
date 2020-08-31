@@ -1,56 +1,45 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import { mapStateToProps } from "../../../redux/store";
+import logo30 from "../../../images/logo-30.png";
 
-export class HeaderComponent extends React.Component {
-  render() {
-    return(
-      <header>
-        <Nav className="navbar navbar-expand-md navbar-dark fixed-top bg-fogo pt-0 pb-0">
-          <div className="container">
-            <Link to='/' className="navbar-brand mb-0">
-              <img alt="Brand" src="/img/logo.png" width="30px" height="30px" />
-              <span className="navbar-brand mb-0 h1 text-white ml-1" style={{fontWeight:"900"}}>FOGO</span>
-            </Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon" />
-            </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
-                  <Link to="/" className="nav-link">Home</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/about" className="nav-link">About me</Link>
-                </li>
-              </ul>
-              <ul className="navbar-nav ml-auto">
-                {this.props.isAuthenticated ?
-                  <li className="nav-item dropdown">
-                    <Link className="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">
-                      {this.props?.userInfo?.fullName}
-                    </Link>
-                    <div className="dropdown-menu">
-                      <Link className="dropdown-item" to="#">Profile</Link>
-                      <div className="dropdown-divider" />
-                      <Link className="dropdown-item" to="/auth/logout">Log out</Link>
-                    </div>
-                  </li> :
-                  <li className="nav-item">
-                    <Link className="nav-link active" to="/auth">Login/Register</Link>
-                  </li>
-                }
-              </ul>
-            </div>
-          </div>
-        </Nav>
-      </header>
-    );
-  }
+function HeaderComponent(props) {
+  return(
+    <React.Fragment>
+      <Navbar expand="md" fixed="top" variant="dark" className="bg-fogo pt-1 pb-1">
+        <Container>
+          <Navbar.Brand as={Link} to="/" className="text-white m-0">
+            <img alt="Brand" src={logo30} />
+            <span className="ml-2 mr-5">FOGO</span>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar" />
+          <Navbar.Collapse id="navbar" >
+            <Nav className="mr-auto">
+              <Nav.Link as={Link} to="/" active={window.location.pathname === "/"}>Home</Nav.Link>
+              <Nav.Link as={Link} to="/about" active={window.location.pathname === "/about"}>About me</Nav.Link>
+            </Nav>
+            <Nav className="ml-auto">
+              {props.isAuthenticated ?
+                <NavDropdown id="me" title={props?.userInfo?.fullName}>
+                  <NavDropdown.Item as={Link} to="#">Trang cá nhân</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="#">Phòng của tôi</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="#">Phòng quan tâm</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/rooms/add">Đăng phòng</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/auth/logout">Đăng xuất</NavDropdown.Item>
+                </NavDropdown> :
+                <Nav.Link as={Link} to="/auth/login">
+                  Đăng nhập/Đăng kí
+                </Nav.Link>
+              }
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </React.Fragment>
+  );
 }
 
 export default connect(mapStateToProps)(HeaderComponent);

@@ -1,10 +1,8 @@
-$fogo-color: #F25C05;
-$main-color: #4877F8;
-$icon-color: #495F8C;
+$fogo-color: #F25C05 !global;
+$main-color: #4877F8 !global;
+$icon-color: #495F8C !global;
+
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2&family=Open+Sans&display=swap');
-.bg-fogo {
-  background-color: $fogo-color;
-}
 .text-fogo {
   color: #F25C05;
 }
@@ -13,6 +11,9 @@ $icon-color: #495F8C;
 }
 .text-icon {
   color: $icon-color;
+}
+.bg-fogo {
+  background: $fogo-color;
 }
 body {
   font-family: 'Open Sans', sans-serif;

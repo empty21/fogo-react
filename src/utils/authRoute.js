@@ -4,10 +4,10 @@ import { Route, Redirect } from "react-router";
 import pushNotify from "./pushNotify";
 import { mapStateToProps } from "../redux/store";
 
-const AuthRoute = ({ component: Component, isAuthenticated, RequireRole = 0, userInfo,...rest }) => (
+const AuthRoute = ({ component: Component, isAuthenticated, requiredRole = 0, userInfo,...rest }) => (
   <Route {...rest} render={(props) => (
     isAuthenticated === true
-      ? userInfo.role >= RequireRole ?
+      ? userInfo.role >= requiredRole ?
       <Component {...props} />
       :
         <div>
