@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useForm } from "react-hook-form";
 import {Button, Col, Container, Form, Spinner} from "react-bootstrap";
 import { connect } from "react-redux";
@@ -8,8 +8,10 @@ import api from "../../../services/api";
 import pushNotify from "../../../utils/pushNotify";
 
 function LoginComponent(props) {
-  document.title = "Fogo - Đăng nhập";
   const { register, handleSubmit } = useForm();
+  useEffect(() => {
+    document.title = "Fogo - Đăng nhập";
+  }, [])
   const doLogin = (data) => {
     props.setLoading();
     api.post("/users/login", data)

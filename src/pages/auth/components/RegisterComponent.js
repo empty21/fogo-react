@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { Button, Col, Container, Form, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -15,8 +15,10 @@ const validVietnameseName = (name) => {
   return regex.test(name);
 }
 function RegisterComponent(props) {
-  document.title = "Fogo - Đăng ký";
   const { register, handleSubmit, errors, getValues } = useForm();
+  useEffect(() => {
+    document.title = "Fogo - Đăng ký";
+  },[])
   const doRegister = (data) => {
     props.setLoading();
     api.post("/users/register", data)
