@@ -32,7 +32,7 @@ function SharedRoomComponent() {
             <Skeleton count={3}/> :
             data && data.length > 0 ?
               data.map(room =>
-                <LazyLoad key={room._id} height={150}>
+                <LazyLoad height={150} once>
                   <SharedRoomItem data={room}/>
                   <div className="border-top my-3"/>
                 </LazyLoad>

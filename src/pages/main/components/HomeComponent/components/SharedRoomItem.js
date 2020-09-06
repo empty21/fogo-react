@@ -30,7 +30,10 @@ function SharedRoomItem(props) {
       <Link className="text-decoration-none" to={"/rooms/"+data._id}>
         <Row as="div" className="room-preview">
           <Col xs={6}>
-            <img className="room-thumbnail shared-room" alt="Room thumbnail" src={data?.images[0]}/>
+            <img className="room-thumbnail shared-room" alt="Room thumbnail"
+                 src={"https://res.cloudinary.com/emtpy21/image/upload/h_500/" +
+                 data?.images?.[0]?.replace("https://res.cloudinary.com/emtpy21/image/upload/", "")}
+            />
           </Col>
           <Col xs={6} className="text-center text-fogo">
             <h3>{(data.details.price.value).toLocaleString("vi-VN")}</h3>

@@ -3,28 +3,23 @@ import SearchedRoomComponent from "../HomeComponent/components/SearchedRoomCompo
 import InputRange from "react-input-range";
 import "react-input-range/src/scss/index.scss"
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 
 function SearchComponent(props) {
-  const [text, setText] = useState(props.match.params.searchText.split("-").join(" "))
-  const [price, setPrice] = useState({min: 0, max: 9.9});
-  const [type, setType] = useState(["Unshared", "Shared", "Apartment", "Dormitory"]);
-  const [gender, setGender] = useState("any");
-  const [query, setQuery] = useState({
-    text,
-    price,
-    type,
-    gender
-  });
+  const { register, handleSubmit } = useForm();
+  const [price, setPrice] = useState({min: 0, max: 10});
+  const [query, setQuery] = useState({text: props.match.params.searchText.split("-").join(" ")});
   useEffect(() => {
-    document.title = "Fogo - Tìm kiếm: " + text
-  }, [text]);
-  const typeChange = (e) => {
-    const { target } = e;
-    if(target.checked) {
-      setType([...type, target.id])
-    } else {
-      setType([...type].filter(e => e !== target.id))
-    }
+    document.title = "Fogo - Tìm kiếm: " + query.text
+  }, [query]);
+  const handleSearch = (data) => {
+    if(data.text !== query.text) props.history.push("/search/"+data.text.split(" ").join("-"));
+    setQuery({
+      text: data.text,
+      gender: data.gender,
+      price,
+      type: Object.keys(data.type).filter(key => data.type[key])
+    });
   }
   return (
     <React.Fragment>
@@ -39,58 +34,60 @@ function SearchComponent(props) {
                 <span><i className="fas fa-filter text-fogo mr-1"/>Bộ lọc tìm kiếm</span>
               </Card.Header>
               <Card.Body className="text-icon">
-                <Form.Group>
-                  <Form.Label>Từ khoá:</Form.Label>
-                  <Form.Control className="rounded-pill"
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                  />
-                </Form.Group>
-                <div className="border-top my-3"/>
-                <Form.Group>
-                  <Form.Label className="mb-4">Khoảng giá (triệu): </Form.Label>
-                  <InputRange
-                    minValue={0} maxValue={10}
-                    value={price} step={0.1}
-                    onChange={setPrice}
-                    formatLabel={value => value.toFixed(1)}
-                  />
-                </Form.Group>
-                <div className="border-top my-3 mt-4"/>
-                <Form.Group>
-                  <Form.Label>Loại phòng: </Form.Label>
-                  <Form.Check label="Phòng cho thuê" id="Unshared" defaultChecked={true} onChange={typeChange}/>
-                  <Form.Check label="Phòng ở ghép" id="Shared" defaultChecked={true} onChange={typeChange}/>
-                  <Form.Check label="Căn hộ" id="Apartment" defaultChecked={true} onChange={typeChange}/>
-                  <Form.Check label="Kí túc xá/Home Stay" id="Dormitory" defaultChecked={true} onChange={typeChange}/>
-                </Form.Group>
-                <div className="border-top my-3"/>
-                <Form.Group>
-                  <Form.Label>Giới tính: </Form.Label>
-                  <Form.Control as="select" className="rounded-pill" value={gender} onChange={e => setGender(e.target.value)}>
-                    <option value="any">Nam hoặc nữ</option>
-                    <option value="male">Nam</option>
-                    <option value="female">Nữ</option>
-                  </Form.Control>
-                </Form.Group>
-                <div className="border-top my-3"/>
-                <Form.Group className="clearfix mb-0">
-                  <Button className="rounded-pill btn-light btn-outline-warning float-right"
-                          onClick={() => {
-                            setText(props.match.params.searchText.split("-").join(" "));
-                            setGender("any");
-                            setType(["Unshared", "Shared", "Apartment", "Dormitory"]);
-                            setPrice({min: 0, max: 9.9})
-                          }}
-                  >
-                    Clear
-                  </Button>
-                  <Button className="rounded-pill btn-success float-left"
-                          onClick={() => setQuery({ text, price, type, gender })}
-                  >
-                    <i className="fa fa-search text-white"/>
-                  </Button>
-                </Form.Group>
+                <Form onSubmit={handleSubmit(handleSearch)}>
+                  <Form.Group>
+                    <Form.Label>Từ khoá:</Form.Label>
+                    <Form.Control className="rounded-pill"
+                                  name="text"
+                                  defaultValue={query.text}
+                                  ref={register}
+                    />
+                  </Form.Group>
+                  <div className="border-top my-3"/>
+                  <Form.Group>
+                    <Form.Label className="mb-4">Khoảng giá (triệu): </Form.Label>
+                    <InputRange
+                      minValue={0} maxValue={10}
+                      value={price} step={0.1}
+                      onChange={setPrice}
+                      formatLabel={value => value.toFixed(1)}
+                    />
+                  </Form.Group>
+                  <div className="border-top my-3 mt-4"/>
+                  <Form.Group>
+                    <Form.Label>Loại phòng: </Form.Label>
+                    <Form.Check name="type.Unshared" label="Phòng cho thuê"
+                                ref={register}
+                                defaultChecked={true}/>
+                    <Form.Check name="type.Shared" label="Phòng ở ghép"
+                                ref={register}
+                                defaultChecked={true}/>
+                    <Form.Check name="type.Apartment" label="Căn hộ"
+                                ref={register}
+                                defaultChecked={true}/>
+                    <Form.Check name="type.Dormitory" label="Kí túc xá/Home Stay"
+                                ref={register}
+                                defaultChecked={true}/>
+                  </Form.Group>
+                  <div className="border-top my-3"/>
+                  <Form.Group>
+                    <Form.Label>Giới tính: </Form.Label>
+                    <Form.Control as="select" className="rounded-pill" name="gender" ref={register}>
+                      <option value="any">Nam hoặc nữ</option>
+                      <option value="male">Nam</option>
+                      <option value="female">Nữ</option>
+                    </Form.Control>
+                  </Form.Group>
+                  <div className="border-top my-3"/>
+                  <Form.Group className="clearfix mb-0">
+                    <Button type="reset" className="rounded-pill btn-light btn-outline-warning float-right">
+                      Clear
+                    </Button>
+                    <Button type="submit" className="rounded-pill btn-success float-left">
+                      <i className="fa fa-search text-white"/>
+                    </Button>
+                  </Form.Group>
+                </Form>
               </Card.Body>
             </Card>
           </Col>

@@ -30,7 +30,10 @@ function SearchedRoomItem(props) {
       <Link className="text-decoration-none" to={"/rooms/"+data._id}>
         <Row as="div" className="room-preview">
           <Col sm={4}>
-            <img className="room-thumbnail" alt="Room thumbnail" src={data?.images[0]}/>
+            <img className="room-thumbnail" alt="Room thumbnail"
+                 src={"https://res.cloudinary.com/emtpy21/image/upload/h_500/" +
+                 data?.images?.[0]?.replace("https://res.cloudinary.com/emtpy21/image/upload/", "")}
+            />
           </Col>
           <Col sm={8} className="mt-sm-0 text-dark">
             <h4>{data.details.name}</h4>
@@ -41,9 +44,9 @@ function SearchedRoomItem(props) {
                     <i className="fas fa-house-user text-icon mr-2"/>
                     <span>
                 {
-                  data.type === "Dormitory"?"Kí túc xá":
-                    data.type === "Apartment"?"Căn hộ":
-                      data.type === "Shared"?"Phòng ở ghép":
+                  data.type === "Dormitory" ? "Kí túc xá":
+                    data.type === "Apartment" ? "Căn hộ":
+                      data.type === "Shared" ? "Phòng ở ghép" :
                         "Phòng cho thuê"
                 }
               </span>

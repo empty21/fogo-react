@@ -43,6 +43,7 @@ function RoomDetailsComponent(props) {
     setPhotoIndex(id);
     setLightBoxOpen(true);
   }
+
   const handleFollow = (e) => {
     e.preventDefault();
     api.post("/rooms/"+room._id+"/follow")
@@ -58,15 +59,20 @@ function RoomDetailsComponent(props) {
       pushNotify({title: "Error", message: "Lỗi khi thêm phòng vào danh sách quan tâm", type: "danger"});
     });
   }
+
   return (
     <React.Fragment>
-      <Container fluid={true}>
+      <Container fluid={true} className="mt-5 pt-3">
         {props.ui.loading && <Skeleton/>}
         {room &&
-        <Breadcrumb className="pt-5">
+        <Breadcrumb>
           <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}} >Home</Breadcrumb.Item>
-          <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>{room.address.district.text}</Breadcrumb.Item>
-          <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>{room.address.ward.text}</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "/search/"+room.address.district.text.split(" ").join("-")}}>
+            {room.address.district.text}
+          </Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{to: "/search/"+room.address.ward.text.split(" ").join("-")}}>
+            {room.address.ward.text}
+          </Breadcrumb.Item>
           <Breadcrumb.Item linkAs={Link} linkProps={{to: "#"}}>
             {room.details.name}
             {room.disabled &&

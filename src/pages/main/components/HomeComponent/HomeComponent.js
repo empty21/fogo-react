@@ -13,7 +13,7 @@ function HomeComponent() {
       <Container fluid={true}>
         <Row className="pt-5">
           <Col md={8}>
-            <SearchedRoomComponent tabName="Phòng cho thuê" query={{text: ""}}/>
+            <SearchedRoomComponent tabName="Phòng cho thuê" query={{type: ["Unshared", "Apartment", "Dormitory"]}}/>
           </Col>
           <Col md={4}>
             <SharedRoomComponent />
