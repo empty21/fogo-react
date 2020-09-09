@@ -1,0 +1,31 @@
+// Your custom styles
+@import "custom-variables";
+@import "core/_colors";
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2&family=Open+Sans&display=swap');
+.bg-primary {
+  background: $primary-color;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  scroll-behavior: smooth;
+}
+h1,h2,h3,h4,h5,h6,a {
+  font-family: 'Baloo Thambi 2', cursive;
+  font-weight: bold;
+}
+
+#content {
+  background: url("../images/home-background.png") repeat;
+  background-size: cover;
+}
+.hr-primary {
+  border-top: 1px solid $primary-color;
+}
+i.active {
+  color: $red-base;
+}
+.room-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}

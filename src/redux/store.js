@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import { setAuthenticated, setUnauthenticated } from "./actions/authAction";
 import { setLoading, clearUi } from "./actions/uiAction";
+import {isAuthenticatedSelector, loadingSelector, userInfoSelector} from "./selectors";
 
 const initialState = {};
 
@@ -14,9 +15,9 @@ const store = createStore(
 
 export const mapStateToProps = (state) => {
   return {
-    ui: state.ui,
-    isAuthenticated: state?.user?.isAuthenticated,
-    userInfo: state?.user?.data
+    loading: loadingSelector(state),
+    isAuthenticated: isAuthenticatedSelector(state),
+    userInfo: userInfoSelector(state)
   }
 }
 export const mapDispatchToProps = (dispatch) => {

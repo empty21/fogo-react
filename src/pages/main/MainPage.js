@@ -1,33 +1,39 @@
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import MessengerChat from "react-messenger-customer-chat";
-import "./MainPage.scss";
-import HeaderComponent from "./components/HeaderComponent";
-import FooterComponent from "./components/FooterComponent";
-import HomeComponent from "./components/HomeComponent/HomeComponent";
-import RoomDetailsComponent from "./components/RoomDetailsComponent/RoomDetailsComponent";
-import AuthRoute from "../../utils/authRoute";
-import AddRoomComponent from "./components/AddRoomComponent/AddRoomComponent";
-import SearchComponent from "./components/SearchComponent/SearchComponent";
+import HeaderComponent from "./layouts/Header";
+import Footer from "./layouts/Footer";
+import HomeComponent from "./layouts/MainContents/Home/HomeComponent";
+import RoomDetailsComponent from "./layouts/MainContents/RoomDetails/RoomDetailsComponent";
+import SearchResultComponent from "./layouts/MainContents/SearchResult/SearchResultComponent";
+import {Helmet} from "react-helmet";
 
 function MainPage() {
   return(
     <React.Fragment>
+      <Helmet>
+        <title>Fogo - Ứng dụng tìm phòng trọ miễn phí</title>
+        <meta property="og:title" content="Fogo - Ứng dụng tìm phòng trọ miễn phí"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://fogovietnam.me" />
+        <meta property="og:image" content="https://fogovietnam.me/img/logo.jpg" />
+        <meta property="og:description" content="Ứng dụng tìm phòng trọ miễn phí cho sinh viên" />
+        <meta name="description" content="Ứng dụng tìm phòng trọ miễn phí cho sinh viên"/>
+      </Helmet>
       <HeaderComponent />
       <MessengerChat
         pageId="117709253256395"
         appId="121019348627722"
       />
-      <Switch>
-        <Route exact path="/" component={HomeComponent}/>
-        <Route path="/search/:searchText" component={SearchComponent}  />
-        <AuthRoute exact path="/rooms/add" component={AddRoomComponent}/>
-        <Route path="/rooms/:id" component={RoomDetailsComponent}/>
-        <AuthRoute exact path="/me/followed" component={AddRoomComponent} />
-        <AuthRoute exact path="/me/rooms" component={AddRoomComponent} />
-        <Route path="*"><Redirect to="/404"/></Route>
-      </Switch>
-      <FooterComponent />
+      <div id="content">
+        <Switch>
+          <Route exact path="/" component={HomeComponent}/>
+          <Route path="/rooms/:id" component={RoomDetailsComponent} />
+          <Route path="/search" component={SearchResultComponent} />
+          <Route path="*"><Redirect to="/404"/></Route>
+        </Switch>
+      </div>
+      <Footer />
     </React.Fragment>
   );
 }

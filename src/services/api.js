@@ -6,6 +6,7 @@ import { setUnauthenticated } from "../redux/actions/authAction";
 import checkJwtExpiry from "../utils/checkJwtExpiry";
 import pushNotify from "../utils/pushNotify";
 fetch.Promise = Bluebird;
+
 async function handleResponse(res) {
   if(!res.ok) {
     throw await res.json();
@@ -94,5 +95,13 @@ const api = {
     );
   }
 }
-
+export const getSearchResult = (query) => {
+  return api.post("/rooms/search", query)
+  .catch(() => {
+    pushNotify({title: "Lỗi", message: "Lấy data thất bại", type: "danger"});
+  })
+}
+export const doFollow = (id) => {
+  return api.post("/rooms/"+id+"/follow");
+}
 export default api;

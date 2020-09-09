@@ -59,7 +59,7 @@ function AddRoomComponent(props) {
       <Card>
         <Card.Body>
           <Container className="text-icon">
-            <h1 className="text-fogo font-weight-bold">Đăng phòng</h1>
+            <h1 className="text-primary font-weight-bold">Đăng phòng</h1>
             <span>* Trước khi duyệt, chúng tôi sẽ liên hệ với bạn để xác nhận cơ sở vật chất</span>
             <Row as={Form}  md={2}  xs={1} className="mt-4 pl-1 pl-md-5"
                  onSubmit={handleSubmit(handleCreate)}
@@ -67,7 +67,7 @@ function AddRoomComponent(props) {
               <Col>
                 <Form.Group>
                   <Form.Label>1. Tên phòng</Form.Label>
-                  <Form.Control type="text" className="rounded-pill"
+                  <Form.Control type="text" className=" "
                                 name="details.name" required
                                 placeholder=""
                                 ref={register}
@@ -76,7 +76,7 @@ function AddRoomComponent(props) {
                 <Form.Group>
                   <Form.Label>2. Địa chỉ</Form.Label>
                   <InputGroup>
-                    <Form.Control as="select" className="rounded-pill"
+                    <Form.Control as="select" className=" "
                                   name="address.city.code" required
                                   ref={register}
                                   onChange={e => {
@@ -89,7 +89,7 @@ function AddRoomComponent(props) {
                       <option value="" disabled>City</option>
                       {cityList.map(item => <option key={item.code} value={item.code}>{item.name}</option> )}
                     </Form.Control>
-                    <Form.Control as="select" className="rounded-pill"
+                    <Form.Control as="select" className=" "
                                   name="address.district.code" required
                                   ref={register}
                                   onChange={e => {
@@ -102,7 +102,7 @@ function AddRoomComponent(props) {
                       <option value="" disabled>District</option>
                       {districtList.map(item => <option key={item.code} value={item.code}>{item.name}</option> )}
                     </Form.Control>
-                    <Form.Control as="select" className="rounded-pill"
+                    <Form.Control as="select" className=" "
                                   name="address.ward.code" required
                                   ref={register}
                                   defaultValue=""
@@ -113,11 +113,11 @@ function AddRoomComponent(props) {
                     </Form.Control>
                   </InputGroup>
                   <InputGroup className="mt-2">
-                    <Form.Control type="text" placeholder="Số nhà" className="rounded-pill"
+                    <Form.Control type="text" placeholder="Số nhà" className=" "
                                   name="address.houseNumber" required
                                   ref={register}
                     />
-                    <Form.Control type="text" placeholder="Đường" className="rounded-pill"
+                    <Form.Control type="text" placeholder="Đường" className=" "
                                   name="address.street" required
                                   ref={register}
                     />
@@ -127,7 +127,7 @@ function AddRoomComponent(props) {
                   <Form.Label>3. Thông tin chi tiết</Form.Label>
                   <Row xs={1} md={2}>
                     <Col>
-                      <Form.Control as="select" className="rounded-pill"
+                      <Form.Control as="select" className=" "
                                     name="details.type" required
                                     ref={register}
                       >
@@ -140,27 +140,27 @@ function AddRoomComponent(props) {
                     </Col>
                     <Col>
                       <InputGroup>
-                        <Form.Control type="number"  className="rounded-pill"
+                        <Form.Control type="number"  className=" "
                                       name="details.area" required
                                       placeholder="VD: 25"
                                       min="1" step="1"
                                       ref={register}
                         />
                         <InputGroup.Append>
-                          <InputGroup.Text className="rounded-pill">m²</InputGroup.Text>
+                          <InputGroup.Text className=" ">m²</InputGroup.Text>
                         </InputGroup.Append>
                       </InputGroup>
                       <Form.Text>* Diện tích</Form.Text>
                     </Col>
                     <Col>
                       <InputGroup>
-                        <Form.Control type="number" className="rounded-pill"
+                        <Form.Control type="number" className=" "
                                       name="details.capacity" required
                                       placeholder="VD: 3"
                                       min="1" step="1"
                                       ref={register}
                         />
-                        <Form.Control as="select" className="rounded-pill"
+                        <Form.Control as="select" className=" "
                                       name="details.gender" required
                                       ref={register}
                         >
@@ -172,7 +172,7 @@ function AddRoomComponent(props) {
                       <Form.Text>* Sức chứa/Giới tính</Form.Text>
                     </Col>
                     <Col>
-                      <Form.Control type="text" className="rounded-pill"
+                      <Form.Control type="text" className=" "
                                     name="status" required
                                     placeholder="VD: Cần 2 người..."
                                     ref={register}
@@ -180,7 +180,7 @@ function AddRoomComponent(props) {
                       <Form.Text>* Tình trạng phòng</Form.Text>
                     </Col>
                     <Col md={12}>
-                      <Form.Control as="textarea" className="rounded-pill" rows={3}
+                      <Form.Control as="textarea" className=" " rows={3}
                                     name="details.note" required
                                     placeholder=""
                                     ref={register}
@@ -196,13 +196,13 @@ function AddRoomComponent(props) {
                   <Row xs={1} md={2}>
                     <Col>
                       <InputGroup>
-                        <Form.Control type="number"  className="rounded-pill"
+                        <Form.Control type="number"  className=" "
                                       name="details.price.value" required
                                       placeholder="VD: 1.2"
                                       min="0" step="0.1"
                                       ref={register}
                         />
-                        <Form.Control as="select" className="rounded-pill"
+                        <Form.Control as="select" className=" "
                                       name="details.price.unit" required
                                       ref={register}
                         >
@@ -213,7 +213,7 @@ function AddRoomComponent(props) {
                       <Form.Text>* Giá phòng</Form.Text>
                     </Col>
                     <Col>
-                      <Form.Control type="text" className="rounded-pill"
+                      <Form.Control type="text" className=" "
                                     name="details.deposit" required
                                     placeholder="VD: 1 tháng"
                                     ref={register}
@@ -222,13 +222,13 @@ function AddRoomComponent(props) {
                     </Col>
                     <Col>
                       <InputGroup>
-                        <Form.Control type="number" className="rounded-pill"
+                        <Form.Control type="number" className=" "
                                       name="details.additionalFee.electric.value" required
                                       placeholder="VD: 3.5"
                                       min="0" step="0.1"
                                       ref={register}
                         />
-                        <Form.Control as="select" className="rounded-pill"
+                        <Form.Control as="select" className=" "
                                       name="details.additionalFee.electric.unit" required
                                       ref={register}
                         >
@@ -240,13 +240,13 @@ function AddRoomComponent(props) {
                     </Col>
                     <Col>
                       <InputGroup>
-                        <Form.Control type="number" className="rounded-pill"
+                        <Form.Control type="number" className=" "
                                       name="details.additionalFee.water.value" required
                                       placeholder="VD: 20"
                                       min="0" step="0.1"
                                       ref={register}
                         />
-                        <Form.Control as="select" className="rounded-pill"
+                        <Form.Control as="select" className=" "
                                       name="details.additionalFee.water.unit" required
                                       ref={register}
                         >
@@ -257,7 +257,7 @@ function AddRoomComponent(props) {
                       <Form.Text>* Tiền nước</Form.Text>
                     </Col>
                     <Col>
-                      <Form.Control type="text" className="rounded-pill"
+                      <Form.Control type="text" className=" "
                                     name="details.additionalFee.other" required
                                     placeholder="VD: Wifi: 100k,..."
                                     ref={register}
@@ -372,7 +372,7 @@ function AddRoomComponent(props) {
                   <Form.Label>6. Thông tin chủ phòng</Form.Label>
                   <Row xs={2}>
                     <Col>
-                      <Form.Control type="text" className="rounded-pill"
+                      <Form.Control type="text" className=" "
                                     name="owner.name"
                                     placeholder="VD: Nguyễn Văn A..."
                                     ref={register}
@@ -380,7 +380,7 @@ function AddRoomComponent(props) {
                       <Form.Text>* Tên chủ phòng</Form.Text>
                     </Col>
                     <Col>
-                      <Form.Control type="text" className="rounded-pill"
+                      <Form.Control type="text" className=" "
                                     name="owner.phoneNumber"
                                     placeholder="VD: 09xxxxxxx"
                                     ref={register}
@@ -401,8 +401,8 @@ function AddRoomComponent(props) {
                              }}
                   />
                   <Form.Text>Ảnh đã chọn: {files.map(file => file.name+" ")}</Form.Text>
-                  <Button className="rounded-pill btn-light btn-outline-info mt-2"
-                          disabled={props.ui.loading}
+                  <Button className="  btn-light btn-outline-info mt-2"
+                          disabled={props.loading}
                           onClick={handleUploadImage}
                   >
                     Upload images
@@ -415,12 +415,12 @@ function AddRoomComponent(props) {
                 )}
               </Col>
               <Col xs={12} md={12} className="clearfix">
-                <Button type="submit" className="float-right rounded-pill ml-3"
-                        disabled={props.ui.loading}
+                <Button type="submit" className="float-right   ml-3"
+                        disabled={props.loading}
                 >
                   Đăng phòng
                 </Button>
-                <Button type="reset" className="float-right rounded-pill btn-light btn-outline-warning">
+                <Button type="reset" className="float-right   btn-light btn-outline-warning">
                   Clear
                 </Button>
               </Col>
