@@ -13,7 +13,7 @@ function Showcase() {
             <h6 className="mb-4">abc xyz....</h6>
           </div>
           <div className="smooth-scroll">
-            <MDBBtn color="primary" href="#unshared-room" className="btn-primary waves-ripple">Phòng cho thuê</MDBBtn>
+            <MDBBtn color="primary" href="#unshared-room" className="btn-outline-primary waves-ripple">Phòng cho thuê</MDBBtn>
             <MDBBtn color="primary" href="#shared-room" className="btn-outline-primary waves-ripple">Phòng ở ghép</MDBBtn>
           </div>
         </MDBCol>

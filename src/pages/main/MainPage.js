@@ -12,8 +12,8 @@ function MainPage() {
   return(
     <React.Fragment>
       <Helmet>
-        <title>Fogo - Ứng dụng tìm phòng trọ miễn phí</title>
-        <meta property="og:title" content="Fogo - Ứng dụng tìm phòng trọ miễn phí"/>
+        <title>Fogo - Giải pháp tìm phòng trọ miễn phí</title>
+        <meta property="og:title" content="Fogo - Giải pháp tìm phòng trọ miễn phí"/>
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://fogovietnam.me" />
         <meta property="og:image" content="https://fogovietnam.me/img/logo.jpg" />

@@ -1,0 +1,55 @@
+.navbar{
+    height: 3rem;
+}
+
+#showcase-slogan >h1 {
+    font-size: 50px;
+}
+#showcase-slogan > h5{
+    font-size: 30px;
+    /*margin: 6rem 0rem;*/
+    color :#495f8c;
+}
+.btn-outline-primary {
+    opacity: 0.9;
+    border-radius: 10px !important;
+    color: #F25C05 !important;
+    background-color: transparent !important;
+    border: 2px solid #F25C05 !important;
+    transition: all 2s;
+}
+.btn-outline-primary:hover {
+    transform: scale(1.1);
+}
+.fa-facebook:hover{
+    transform: scale(1.1);
+
+}
+.text-primary{
+    margin: 2rem 0rem;
+}
+
+.page-link{
+    border-radius: 1rem !important;
+}
+.pagination{
+    opacity: 0.9;
+    transition: all 0.25s;
+}
+.pagination:hover{
+    transform: scale(1.1);
+    opacity: 1;
+}
+#room-details > div > div > div > ul {
+    border-radius: 10px;
+    max-height: 4.5rem;
+    background-color: #ffffff !important;
+    transform: translate(0px,10px);
+}
+#room-details .Ripple-parent{
+    color: #777777 !important;
+}
+ul .Ripple-parent+.active{
+    background-color: rgba(255, 0, 0, 0.0) !important;
+    color: #f25c25 !important;
+}

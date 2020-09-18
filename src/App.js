@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom"
 import "./assets/css/mdb.min.css";
+import "./app.css";
 import "./assets/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "react-notifications-component/dist/theme.css";
