@@ -29,3 +29,9 @@ i.active {
   height: 200px;
   object-fit: cover;
 }
+
+img.preview {
+  height: 100px;
+  max-width: 100%;
+  object-fit: cover;
+}

@@ -7,6 +7,8 @@ import HomeComponent from "./layouts/MainContents/Home/HomeComponent";
 import RoomDetailsComponent from "./layouts/MainContents/RoomDetails/RoomDetailsComponent";
 import SearchResultComponent from "./layouts/MainContents/SearchResult/SearchResultComponent";
 import {Helmet} from "react-helmet";
+import AuthRoute from "../../utils/authRoute";
+import AddRoomComponent from "./layouts/MainContents/AddRoom/AddRoomComponent";
 
 function MainPage() {
   return(
@@ -27,7 +29,8 @@ function MainPage() {
       />
       <div id="content">
         <Switch>
-          <Route exact path="/" component={HomeComponent}/>
+          <Route exact path="/" component={HomeComponent} />
+          <AuthRoute exact path="/rooms/add/" component={AddRoomComponent} />
           <Route path="/rooms/:id" component={RoomDetailsComponent} />
           <Route path="/search" component={SearchResultComponent} />
           <Route path="*"><Redirect to="/404"/></Route>

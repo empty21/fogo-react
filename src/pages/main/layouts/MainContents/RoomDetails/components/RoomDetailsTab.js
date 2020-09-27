@@ -31,11 +31,12 @@ function RoomDetailsTab(props) {
   }
   return (
     <React.Fragment>
-      <MDBNav tabs className="nav-justified bg-primary">
+      <MDBNav tabs className=" nav-justified bg-white">
         <MDBNavItem>
           <MDBNavLink
             link
             to="#"
+            className="text-primary"
             active={activeTab === "1"}
             onClick={toggleItem("1")}
             role="tab"
@@ -47,6 +48,7 @@ function RoomDetailsTab(props) {
           <MDBNavLink
             link
             to="#"
+            className="text-primary"
             active={activeTab === "2"}
             onClick={toggleItem("2")}
             role="tab"
@@ -58,6 +60,7 @@ function RoomDetailsTab(props) {
           <MDBNavLink
             link
             to="#"
+            className="text-primary"
             active={activeTab === "3"}
             onClick={toggleItem("3")}
             role="tab"
@@ -69,6 +72,7 @@ function RoomDetailsTab(props) {
           <MDBNavLink
             link
             to="#"
+            className="text-primary"
             active={activeTab === "4"}
             onClick={toggleItem("4")}
             role="tab"

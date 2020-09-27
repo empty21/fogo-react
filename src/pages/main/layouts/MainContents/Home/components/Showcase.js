@@ -10,7 +10,7 @@ function Showcase() {
             <h1>FOGO</h1>
             <h5>Giải pháp tìm phòng trọ tiện lợi nhất</h5>
             <hr className="hr-primary"/>
-            <h6 className="mb-4">abc xyz....</h6>
+            <h6 className="mb-4"></h6>
           </div>
           <div className="smooth-scroll">
             <MDBBtn color="primary" href="#unshared-room" className="btn-outline-primary waves-ripple">Phòng cho thuê</MDBBtn>
